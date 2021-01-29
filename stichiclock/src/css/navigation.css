@@ -1,0 +1,36 @@
+
+#main-navigation {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    height: 78px;
+    width: 80vw;
+    max-width: 600px;
+}
+
+#main-navigation > .icon-group {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#main-navigation > .indicator {
+    width: 100px;
+    stroke-linecap: round;
+    --stroke: 3px;
+    border: var(--stroke) solid var(--color-style1);
+    border-radius: var(--stroke);
+}
+
+#main-navigation .icon {
+    cursor: pointer;
+    max-width: 70px;
+    transition: transform 0.5s ease;
+}
+
+#main-navigation .icon:not(.toggled) {
+    transform: scale(0.7);
+}

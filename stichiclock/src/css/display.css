@@ -1,0 +1,19 @@
+#main-display {
+    flex: 1 1 auto;
+}
+
+.display {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.display:not(.toggled) {
+    display: flex;
+}
+
+.display p.time-display{
+    font-size: 132px;
+    letter-spacing: 0.05em;
+}
+
