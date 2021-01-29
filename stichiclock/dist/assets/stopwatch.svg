@@ -1,0 +1,7 @@
+<svg id="stopwatch-icon" viewBox="0 0 70 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="35" cy="43" r="32.5" stroke="currentColor" stroke-width="5"/>
+<rect x="32.5" y="5" width="5" height="4" fill="currentColor"/>
+<circle cx="35" cy="43" r="5" fill="currentColor"/>
+<path d="M35 19V53" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+<rect x="24" width="22" height="5" rx="2.5" fill="currentColor"/>
+</svg>
