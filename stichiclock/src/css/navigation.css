@@ -27,10 +27,10 @@
 
 #main-navigation .icon {
     cursor: pointer;
-    max-width: 70px;
-    transition: transform 0.5s ease;
+    max-width: 50px;
+    transition: transform 0.3s ease;
 }
 
-#main-navigation .icon:not(.toggled) {
-    transform: scale(0.7);
+#main-navigation .icon.toggled {
+    transform: scale(1.3);
 }
