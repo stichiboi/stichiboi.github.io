@@ -1,5 +1,4 @@
 #main-display {
-    height: 60vh;
     display: flex;
 }
 
@@ -19,7 +18,7 @@
 }
 
 .display p.time-display{
-    font-size: max(min(10vw, 132px), 30px);
+    font-size: max(min(min(10vw, 10vh), 132px), 30px);
     letter-spacing: 0.05em;
     font-feature-settings: 'pnum' on, 'lnum' on;
 

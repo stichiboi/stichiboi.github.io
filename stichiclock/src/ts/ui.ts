@@ -1,3 +1,5 @@
+import './quotes'
+
 const mainNavIcons = $('#main-navigation .icon');
 
 mainNavIcons.on('click', event => {

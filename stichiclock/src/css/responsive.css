@@ -9,36 +9,41 @@
     }
 }
 
-@media (max-height: 500px) {
+@media (max-height: 520px) {
     .display {
         --display-spacing: 10px;
     }
 }
 
-@media (max-height: 500px), (max-width: 500px) {
-
-    #main-navigation {
-        position: absolute;
-        max-width: 100vw;
+@media (max-height: 520px), (max-width: 500px) {
+    #main-navigation{
+        top: 0;
         height: 40px;
+    }
+
+    #quote-container{
+        bottom: 0;
+    }
+
+    #main-navigation, #quote-container {
         padding: 20px;
+        max-width: 100vw;
 
         left: 0;
         right: 0;
-        top: 0;
+    }
 
+    #main-navigation.back-contrast,
+    #quote-container > .back-contrast{
         width: auto;
+
+        left: 0;
+        right: 0;
         border-radius: 0;
     }
+
 
     #main-navigation > .icon-group {
         justify-content: space-around;
     }
-
-
-    #main-display {
-        flex: 1 1 auto;
-        align-items: flex-end;
-    }
-
 }

@@ -22,7 +22,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 
     background-image: url("../assets/images/background.jpg");
     background-repeat: no-repeat;
@@ -37,4 +37,32 @@ body {
     background: var(--color-style4);
     padding: 20px 60px;
     border-radius: 100px;
+    transition: width var(--transition-style);
+}
+
+.info-text{
+    font-size: 20px
+}
+
+#quote-container{
+    position: absolute;
+    bottom: 40px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    /*overflow: hidden;*/
+    max-width: 80vw;
+}
+
+#quote {
+    text-align: center;
+    z-index: -1;
+}
+
+#quote-container > .back-contrast{
+    position: absolute;
+    bottom: -20px;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
 }
