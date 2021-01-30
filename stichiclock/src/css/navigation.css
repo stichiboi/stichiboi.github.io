@@ -1,4 +1,3 @@
-
 #main-navigation {
     position: absolute;
 
@@ -7,8 +6,9 @@
     display: flex;
     flex-direction: column;
     height: 78px;
-    width: 50vw;
-    max-width: 700px;
+    width: 100vw;
+    box-sizing: border-box;
+    max-width: var(--default-max-width);
 }
 
 #main-navigation > .icon-group {
@@ -37,7 +37,7 @@
     transition-property: transform, opacity;
 }
 
-#main-navigation .icon.toggled {
+#main-navigation .icon.is-selected {
     transform: scale(1.3);
     opacity: 1;
 }

@@ -1,5 +1,17 @@
-#main-display {
-    display: flex;
+#main-display{
+    box-sizing: border-box;
+    padding: 200px 0;
+    width: 100vw;
+}
+
+.gallery-cell{
+    width: 100%;
+    max-width: var(--default-max-width);
+    height: 300px;
+}
+
+.gallery-cell{
+    margin-left: 50vw;
 }
 
 .display {
@@ -28,4 +40,3 @@
     justify-content: center;
     margin: 0;
 }
-

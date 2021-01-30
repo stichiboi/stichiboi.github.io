@@ -12,6 +12,7 @@ body {
     --color-stop: #D64933;
 
     --transition-style: 0.3s ease;
+    --default-max-width: 700px;
 
     position: absolute;
     top:0;
@@ -31,6 +32,8 @@ body {
     background-size: cover;
 
     color: var(--color-style1);
+    overflow: hidden;
+
 }
 
 .back-contrast{

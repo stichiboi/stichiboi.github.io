@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <title>StichiClock</title>
     <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
 
 <nav id="main-navigation" class="back-contrast">
     <div class="icon-group">
-        <svg class="icon toggled">
+        <svg class="icon">
             <use href="./assets/icons/stopwatch.svg#stopwatch-icon"></use>
         </svg>
-        <svg class="icon">
+        <svg class="icon is-selected">
             <use href="./assets/icons/timer.svg#timer-icon"></use>
         </svg>
         <svg class="icon">
@@ -23,13 +24,29 @@
 </nav>
 
 <main id="main-display">
-    <section id="stopwatch" class="display">
-        <p class="time-display back-contrast">00:00:00</p>
-        <div class="button-group">
-            <button class="reset button-cta">Reset</button>
-            <button class="start button-cta">Start</button>
-        </div>
-    </section>
+    <div class="gallery">
+        <section id="stopwatch" class="gallery-cell display">
+            <p class="time-display back-contrast">00:00:00</p>
+            <div class="button-group">
+                <button class="reset button-cta">Reset</button>
+                <button class="start button-cta">Start</button>
+            </div>
+        </section>
+        <section id="timer" class="gallery-cell display">
+            <p class="time-display back-contrast">00:00:00</p>
+            <div class="button-group">
+                <button class="reset button-cta">Reset</button>
+                <button class="start button-cta">Start</button>
+            </div>
+        </section>
+        <section id="alarm" class="gallery-cell display">
+            <p class="time-display back-contrast">00:00:00</p>
+            <div class="button-group">
+                <button class="reset button-cta">Reset</button>
+                <button class="start button-cta">Start</button>
+            </div>
+        </section>
+    </div>
 </main>
 
 <footer id="quote-container">
