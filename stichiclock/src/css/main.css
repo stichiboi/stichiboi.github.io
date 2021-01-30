@@ -22,7 +22,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: stretch;
+    justify-content: space-between;
 
     background-image: url("../assets/images/background.jpg");
     background-repeat: no-repeat;

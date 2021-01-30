@@ -1,5 +1,7 @@
 .button-cta {
-    padding: 20px 40px;
+    flex: 1 1 auto;
+    min-width: 200px;
+    padding: 22px 40px;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 100px;
 
@@ -39,8 +41,10 @@
 .button-group{
     --spacing: 0 0 0 50px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
+    width: 100%;
+
 }
 
 .button-group > *:not(:first-child){

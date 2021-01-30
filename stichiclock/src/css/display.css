@@ -1,13 +1,17 @@
 #main-display {
-    flex: 1 1 auto;
+    height: 60vh;
     display: flex;
-    align-items: center;
 }
 
 .display {
     display: none;
     flex-direction: column;
     align-items: center;
+    --display-spacing: 30px;
+}
+
+.display > *:not(:first-child){
+    margin: var(--display-spacing) 0 0 0;
 }
 
 .display:not(.toggled) {
@@ -17,5 +21,12 @@
 .display p.time-display{
     font-size: max(min(10vw, 132px), 30px);
     letter-spacing: 0.05em;
+    font-feature-settings: 'pnum' on, 'lnum' on;
+
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    margin: 0;
 }
 
