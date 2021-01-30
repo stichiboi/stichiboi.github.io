@@ -8,11 +8,27 @@
     font-family: inherit;
     font-size: 30px;
     letter-spacing: .05em;
+
+    transition: var(--transition-style);
+    transition-property: transform, background-color;
+}
+
+.button-cta:hover{
+    transform: scale(1.1);
+}
+
+.button-cta:active{
+    transform: scale(1);
 }
 
 .button-cta.start{
     color: var(--color-style5);
     background: var(--color-approve);
+}
+
+.button-cta.stop{
+    color: var(--color-style5);
+    background: var(--color-stop);
 }
 
 .button-cta.reset{

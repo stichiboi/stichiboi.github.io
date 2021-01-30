@@ -28,9 +28,12 @@
 #main-navigation .icon {
     cursor: pointer;
     max-width: 50px;
-    transition: transform 0.3s ease;
+    opacity: .5;
+    transition: var(--transition-style);
+    transition-property: transform, opacity;
 }
 
 #main-navigation .icon.toggled {
     transform: scale(1.3);
+    opacity: 1;
 }
