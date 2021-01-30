@@ -37,11 +37,14 @@
 }
 
 .button-group{
+    --spacing: 0 0 0 50px;
     display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-group > *:not(:first-child){
-    margin-left: 50px;
+    margin: var(--spacing);
 }
 
 
