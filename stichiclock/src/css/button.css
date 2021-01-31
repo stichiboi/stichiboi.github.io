@@ -1,59 +1,84 @@
 .button-cta {
     flex: 1 1 auto;
     min-width: 200px;
-    padding: 22px 40px;
+    padding: 20px 40px;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 100px;
 
+    --color-text: var(--color-style5);
+    --color-back: var(--color-style3);
+
+    color: var(--color-text);
+    background: var(--color-back);
+
     text-transform: uppercase;
 
-    font-family: inherit;
-    font-size: 30px;
-    letter-spacing: .05em;
+    font-size: var(--font-size);
 
-    transition: var(--transition-style);
+    transition: var(--transition-style-quick);
     transition-property: transform, background-color;
 }
 
-.button-cta:hover{
-    transform: scale(1.1);
+
+.button-cta.start {
+    --color-back: var(--color-approve);
 }
 
-.button-cta:active{
+.button-cta:hover {
+    transform: scale(1.05);
+}
+
+.button-cta:active {
     transform: scale(1);
 }
 
-.button-cta.start{
-    color: var(--color-style5);
-    background: var(--color-approve);
-}
-
-.button-cta.stop{
+.button-cta.stop {
     color: var(--color-style5);
     background: var(--color-stop);
 }
 
-.button-cta.reset{
-    color: var(--color-style5);
-    background: var(--color-style3);
-}
-
-.button-group{
+.button-group {
     --spacing: 0 0 0 50px;
     display: flex;
     align-items: stretch;
     justify-content: center;
     width: 100%;
-
 }
 
-.button-group > *:not(:first-child){
+.button-group > *:not(:first-child) {
     margin: var(--spacing);
 }
 
+.button-quiet {
+    --color: var(--color-style1);
 
+    border: 3px solid var(--color);
+    color: var(--color);
+    background: none;
+    --size: 50px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: var(--size);
+    font-size: var(--font-size);
 
-button{
+    transition: var(--transition-style-quick);
+    transition-property: color, background-color, border-color, transform;
+}
+
+.button-quiet:hover {
+    --color: var(--color-style3);
+    background: var(--color-style1);
+    transform: scale(1.05);
+}
+
+.button-quiet:active {
+    transform: scale(1);
+}
+
+button {
+    font-family: inherit;
+    letter-spacing: .05em;
+
     cursor: pointer;
     outline: none;
     border: none;

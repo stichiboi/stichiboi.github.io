@@ -1,15 +1,15 @@
 /**
  * Sets the functionality for the stopwatch section
  */
+import {formatTime, toggleStartButton, toggleTime} from "./utils";
 
 const display = $('#stopwatch .time-display');
-let runningId = 0;
 let accumulated = 0;
 
 $('#stopwatch .start').on('click', event => {
     const button = event.currentTarget;
-    toggleButton(button);
-    toggleTimer();
+    toggleStartButton(button);
+    toggleTime(display, startTimer);
 });
 
 $('#stopwatch .reset').on('click', () => {
@@ -23,27 +23,6 @@ $('#stopwatch .reset').on('click', () => {
     display.text(formatTime(0));
 });
 
-function toggleButton(button: HTMLElement) {
-    button.classList.toggle('start');
-    button.classList.toggle('stop');
-    if (button.classList.contains('stop')) {
-        button.innerText = 'Stop';
-    } else {
-        button.innerText = 'Start';
-    }
-}
-
-function toggleTimer() {
-    const currRun = display.attr('data-running');
-    if (!currRun || currRun === '0') {
-        display.attr('data-resetted', 'false');
-        runningId++;
-        display.attr('data-running', runningId);
-        startTimer(runningId);
-    } else {
-        display.attr('data-running', 0);
-    }
-}
 
 /**
  * @param id The run ID is required to avoid overlapping:
@@ -62,10 +41,5 @@ function startTimer(id: number) {
             setTimeout(updateTimer, 1000);
         }
     }
-
     updateTimer();
-}
-
-function formatTime(ms: number) {
-    return new Date(ms).toISOString().substr(11, 8)
 }

@@ -7,7 +7,6 @@
     flex-direction: column;
     height: 78px;
     width: 100vw;
-    box-sizing: border-box;
     max-width: var(--default-max-width);
 }
 

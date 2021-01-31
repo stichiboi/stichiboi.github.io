@@ -1,13 +1,13 @@
 #main-display{
     box-sizing: border-box;
-    padding: 200px 0;
     width: 100vw;
 }
 
 .gallery-cell{
     width: 100%;
     max-width: var(--default-max-width);
-    height: 300px;
+    /*200px is the height of the nav bar + quote bar*/
+    height: calc(100vh - 200px);
 }
 
 .gallery-cell{
@@ -30,13 +30,14 @@
     display: flex;
 }
 
-.display p.time-display{
-    font-size: max(min(min(10vw, 10vh), 132px), 30px);
+.display .time-display{
+
+    --font-size: max(min(min(10vw, 10vh), 132px), 30px);
+    font-size: var(--font-size);
     letter-spacing: 0.05em;
     font-feature-settings: 'pnum' on, 'lnum' on;
 
     width: 100%;
-    box-sizing: border-box;
     display: flex;
     justify-content: center;
     margin: 0;

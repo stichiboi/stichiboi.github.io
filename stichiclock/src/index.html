@@ -33,7 +33,17 @@
             </div>
         </section>
         <section id="timer" class="gallery-cell display">
-            <p class="time-display back-contrast">00:00:00</p>
+            <div class="time-display back-contrast">
+                <input id="timer-hours" class="time-input" placeholder="00" type="number" min="0" max="23">
+                :<input id="timer-minutes" class="time-input" placeholder="00" type="number" min="0" max="59">
+                :<input id="timer-seconds" class="time-input" placeholder="00" type="number" min="0" max="59">
+            </div>
+            <div class="button-group back-contrast">
+                <button class="button-quiet">-5</button>
+                <button class="button-quiet">-1</button>
+                <button class="button-quiet">+1</button>
+                <button class="button-quiet">+5</button>
+            </div>
             <div class="button-group">
                 <button class="reset button-cta">Reset</button>
                 <button class="start button-cta">Start</button>
