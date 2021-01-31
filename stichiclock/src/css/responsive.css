@@ -34,15 +34,22 @@
 
     #main-navigation.back-contrast,
     #quote-container > .back-contrast{
-        width: auto;
+        width: auto !important;
 
         left: 0;
         right: 0;
         border-radius: 0;
+
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 
 
     #main-navigation > .icon-group {
         justify-content: space-around;
+    }
+
+    #main-navigation .icon{
+        max-width: 30px;
     }
 }
