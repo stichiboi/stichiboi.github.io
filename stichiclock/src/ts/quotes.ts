@@ -25,7 +25,7 @@ function changeQuote(index ?: number) {
 
     const id = index < quotes.length ? index : Math.floor(Math.random() * quotes.length);
     if (id.toString() !== currId) {
-        const quote = `${quotes[id].quote} - ${quotes[id].author}`;
+        const quote = `${quotes[id].q} - ${quotes[id].a}`;
         quoteDisplay.fadeOut(() => {
             quoteContainer.css('width', `min(${quote.length * 10}px, 80vw)`);
             quoteDisplay.text(quote);
