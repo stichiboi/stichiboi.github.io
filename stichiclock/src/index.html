@@ -51,9 +51,17 @@
         </section>
         <section id="alarm" class="gallery-cell display">
             <p class="time-display back-contrast">00:00:00</p>
-            <div class="button-group">
-                <button class="reset button-cta">Reset</button>
-                <button class="start button-cta">Start</button>
+            <button id="toggle-alarm-list"  class="button-cta" onclick="this.classList.toggle('toggled')">
+                <svg class="icon">
+                    <use href="./assets/icons/arrow.svg#arrow-icon"></use>
+                </svg>
+            </button>
+            <div id="alarm-list">
+                <div id="add-alarm" class="row-alarm back-contrast">
+                    <svg class="icon">
+                        <use href="./assets/icons/add.svg#add-icon"></use>
+                    </svg>
+                </div>
             </div>
         </section>
     </div>
@@ -63,6 +71,23 @@
     <div class="back-contrast"></div>
     <span id="quote" class="info-text"></span>
 </footer>
+
+<div id="templates" style="display: none">
+    <div id="row-alarm-template">
+        <div class="row-alarm back-contrast">
+            <svg class="icon remove-alarm">
+                <use href="./assets/icons/remove.svg#remove-icon"></use>
+            </svg>
+            <div class="alarm-time">
+                <input class="time-input" placeholder="00" type="number" min="0" max="23">
+                :<input class="time-input" placeholder="00" type="number" min="0" max="59">
+            </div>
+            <button class="alarm-toggle toggle">
+                <span class="toggle-slider"></span>
+            </button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

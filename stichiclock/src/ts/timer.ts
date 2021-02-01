@@ -1,4 +1,11 @@
-import {displayNotification, formatTime, isDisplayRunning, toggleStartButton, toggleTime} from "./utils";
+import {
+    convertInputToTime,
+    displayNotification,
+    formatTime,
+    isDisplayRunning,
+    toggleStartButton,
+    toggleTime
+} from "./utils";
 
 const display = $('#timer .time-display');
 const inputs = display.find('.time-input');
@@ -12,7 +19,7 @@ $('#timer .start').on('click', event => {
     toggleTime(display, startTimer);
 });
 
-$('#timer .reset').on('click', event => {
+$('#timer .reset').on('click', () => {
     const initialTime = parseInt(display.attr('data-initial-duration'));
     if (initialTime && !isNaN(initialTime)) {
         setTimeToInput(initialTime);
@@ -93,17 +100,6 @@ function stopTimer() {
     $('#timer .stop').trigger('click');
     //Play sound
 
-}
-
-function convertInputToTime(inputs: JQuery) {
-    let time = 0;
-    inputs.each(function (index) {
-        const value = $(this).val().toString();
-        if (value) {
-            time += parseInt(value) * Math.pow(60, inputs.length - 1 - index);
-        }
-    });
-    return time * 1000; //In milliseconds
 }
 
 function setTimeToInput(ms: number) {

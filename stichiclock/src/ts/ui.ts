@@ -10,8 +10,8 @@ var flky = new Flickity('.gallery', {
     friction: 0.3,
     pageDots: false,
     wrapAround: true,
-    dragThreshold: 10,
-    initialIndex: 1,
+    dragThreshold: 5,
+    initialIndex: 2,
     on: {
         change: function (index) {
             selectNavIcon(mainNavIcons[index]);

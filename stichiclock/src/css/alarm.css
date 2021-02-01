@@ -1,0 +1,72 @@
+#toggle-alarm-list {
+    flex: none;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#toggle-alarm-list > .icon {
+    /*height: 100%;*/
+    width: 30px;
+    height: 30px;
+
+    transition: transform var(--transition-style);
+}
+
+#toggle-alarm-list.toggled > .icon {
+    transform: rotateZ(180deg);
+}
+
+#toggle-alarm-list.toggled + #alarm-list {
+    max-height: 100vh;
+    /*Add delay to synchronize collapse with rotating icon*/
+    transition-delay: 0.2s;
+}
+
+#alarm-list {
+    width: 100%;
+    max-height: 0;
+    transition: max-height var(--transition-style);
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.row-alarm {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#add-alarm {
+    cursor: pointer;
+}
+
+#add-alarm.row-alarm {
+    justify-content: center;
+}
+
+.row-alarm:not(:first-child) {
+    margin: calc(var(--display-spacing) / 2) 0 0 0;
+}
+
+.alarm-time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.row-alarm > .icon {
+    cursor: pointer;
+    height: 30px;
+    width: 40px;
+}
+
+.row-alarm > .icon:hover {
+    transform: scale(1.05);
+}
+
+.row-alarm > .icon:active {
+    transform: scale(1);
+}

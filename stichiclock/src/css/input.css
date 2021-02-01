@@ -13,6 +13,43 @@
     text-align: start;
 }
 
+.toggle {
+    box-sizing: content-box;
+    --toggle-width: 40px;
+    --toggle-height: calc(var(--toggle-width) / 2);
+
+    height: var(--toggle-height);
+    width: var(--toggle-width);
+
+    display: flex;
+    align-items: center;
+
+
+    --padding: 3px;
+    padding: var(--padding);
+
+    border-radius: 100px;
+    background: var(--color-style1);
+}
+
+.toggle-slider {
+    --size: var(--toggle-height);
+    height: var(--size);
+    width: var(--size);
+    border-radius: var(--size);
+
+    background-color: var(--color-style3);
+
+    transition: var(--transition-style);
+    transition-property: transform, background-color;
+}
+
+.toggle.toggled .toggle-slider {
+    /*Take into account the border width*/
+    background-color: var(--color-approve);
+    transform: translateX(calc(var(--toggle-width) - var(--size)));
+}
+
 input[type="number"] {
     font-family: "Lato", serif;
     font-size: var(--font-size);

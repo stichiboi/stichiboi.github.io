@@ -1,16 +1,16 @@
-#main-display{
+#main-display {
     box-sizing: border-box;
     width: 100vw;
 }
 
-.gallery-cell{
+.gallery-cell {
     width: 100%;
     max-width: var(--default-max-width);
-    /*200px is the height of the nav bar + quote bar*/
-    height: calc(100vh - 200px);
+    /*250px is the height of the nav bar + quote bar*/
+    height: calc(100vh - 250px);
 }
 
-.gallery-cell{
+.gallery-cell {
     margin-left: 50vw;
 }
 
@@ -22,7 +22,7 @@
     --display-spacing: 30px;
 }
 
-.display > *:not(:first-child){
+.display > *:not(:first-child) {
     margin: var(--display-spacing) 0 0 0;
 }
 
@@ -30,7 +30,7 @@
     display: flex;
 }
 
-.display .time-display{
+.display .time-display {
 
     --font-size: max(min(min(10vw, 10vh), 132px), 30px);
     font-size: var(--font-size);

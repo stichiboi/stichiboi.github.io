@@ -4,6 +4,18 @@ export function formatTime(ms: number) {
     return new Date(ms).toISOString().substr(11, 8)
 }
 
+export function convertInputToTime(inputs: JQuery) {
+    let time = 0;
+    inputs.each(function (index) {
+        const value = $(this).val().toString();
+        if (value) {
+            //Starts at 2 because it's the hour position (60^2)
+            time += parseInt(value) * Math.pow(60, 2 - index);
+        }
+    });
+    return time * 1000; //In milliseconds
+}
+
 export function isDisplayRunning(display: JQuery) {
     const currRun = display.attr('data-running');
     return currRun && currRun !== '-1';
@@ -64,16 +76,16 @@ export function requestNotificationPermission() {
     return Promise.resolve(true);
 }
 
-export function displayNotification(title: string, body: string, time: number) {
+export function displayNotification(title: string, body: string, time: number, onclose?: (this: Notification, ev: Event) => any) {
     return requestNotificationPermission().then(allowed => {
         if (allowed) {
             return setTimeout(() => {
-                new Notification(title, {
+                const notification = new Notification(title, {
                     requireInteraction: true,
                     body: body
                 });
+                notification.onclose = onclose;
             }, time);
-
         }
     })
 
