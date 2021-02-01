@@ -9,7 +9,7 @@ let accumulated = 0;
 $('#stopwatch .start').on('click', event => {
     const button = event.currentTarget;
     toggleStartButton(button);
-    toggleTime(display, startTimer);
+    toggleTime(display, startStopwatch);
 });
 
 $('#stopwatch .reset').on('click', () => {
@@ -29,17 +29,17 @@ $('#stopwatch .reset').on('click', () => {
  * if the user presses the start/stop button in a short time span, the previous
  * run of updateTimer() does not stay alive since the ID does not match
  */
-function startTimer(id: number) {
+function startStopwatch(id: string) {
     const startTime = Date.now() - accumulated;
 
-    function updateTimer() {
+    function updateStopwatch() {
         const currTime = Date.now();
         const delta = currTime - startTime;
-        if (display.attr('data-running') === id.toString()) {
+        accumulated = delta;
+        if (display.attr('data-running') === id) {
             display.text(formatTime(delta));
-            accumulated = delta;
-            setTimeout(updateTimer, 1000);
+            setTimeout(updateStopwatch, 1000);
         }
     }
-    updateTimer();
+    updateStopwatch();
 }

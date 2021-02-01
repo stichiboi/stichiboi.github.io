@@ -59,7 +59,7 @@
     width: var(--size);
     height: var(--size);
     border-radius: var(--size);
-    font-size: var(--font-size);
+    font-size: calc(var(--size) / 2);
 
     transition: var(--transition-style-quick);
     transition-property: color, background-color, border-color, transform;

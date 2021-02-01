@@ -5,6 +5,14 @@
     margin: 0;
 }
 
+.time-input:first-child{
+    text-align: end;
+}
+
+.time-input:last-child{
+    text-align: start;
+}
+
 input[type="number"] {
     font-family: "Lato", serif;
     font-size: var(--font-size);
