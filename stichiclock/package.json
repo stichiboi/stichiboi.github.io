@@ -1,7 +1,7 @@
 {
-    "name": "optivo",
+    "name": "stichiclock",
     "version": "1.0.0",
-    "description": "Optivo landing page",
+    "description": "Stichiclock",
     "main": "src/index.js",
     "scripts": {
         "build": "webpack --config webpack/webpack.dev.js",
