@@ -1,7 +1,6 @@
 @media (max-width: 500px) {
     .button-group:not(.--action) {
-        flex-direction: column;
-        --spacing: var(--display-spacing) 0 0 0;
+        --spacing: 0 0 0 var(--display-spacing);
     }
 
     .button-group.--action {
@@ -10,7 +9,7 @@
     }
 
     .button-quiet {
-        --size: 40px;
+        --size: 30px;
     }
 
     .button-cta {
@@ -26,6 +25,14 @@
     .button-cta {
         padding: 10px 20px;
     }
+
+    .button-quiet {
+        --size: 40px;
+    }
+
+    #quote{
+        font-size: 15px;
+    }
 }
 
 @media (max-height: 520px), (max-width: 500px) {
@@ -39,6 +46,7 @@
 
     #main-navigation, #quote-container {
         padding: 20px;
+        height: auto;
         max-width: 100vw;
 
         left: 0;
@@ -46,7 +54,7 @@
     }
 
     .back-contrast {
-        padding: 10px 20px
+        padding: 5px 20px
     }
 
     #main-navigation.back-contrast,
@@ -58,12 +66,12 @@
         border-radius: 0;
     }
 
-
     #main-navigation > .icon-group {
         justify-content: space-around;
     }
 
     #main-navigation .icon {
-        max-width: 30px;
+        max-width: 20px;
+        max-height: 20px
     }
 }
