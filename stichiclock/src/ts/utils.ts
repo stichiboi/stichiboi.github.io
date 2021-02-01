@@ -46,9 +46,14 @@ function getClockID(display: JQuery) {
     return parseInt(clockID);
 }
 
+let areNotificationsAllowed = true;
+
 export function requestNotificationPermission() {
     if (!("Notification" in window)) {
-        alert("This browser does not support desktop notification");
+        if (areNotificationsAllowed) {
+            alert("This browser does not support desktop notification");
+            areNotificationsAllowed = false;
+        }
         return Promise.resolve(false);
     }
     if (Notification.permission !== 'granted') {
