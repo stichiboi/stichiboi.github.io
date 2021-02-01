@@ -5,11 +5,11 @@
     margin: 0;
 }
 
-.time-input:first-child{
+.time-input:first-child {
     text-align: end;
 }
 
-.time-input:last-child{
+.time-input:last-child {
     text-align: start;
 }
 
@@ -25,4 +25,8 @@ input[type="number"] {
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
