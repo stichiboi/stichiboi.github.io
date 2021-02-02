@@ -4,7 +4,7 @@ const quoteDisplay = $('#quote');
 const quoteContainer = $('#quote-container .back-contrast');
 
 (function () {
-    const changeQuoteInterval = 10000; //in ms
+    const changeQuoteInterval = 30000; //30s in ms
     //Immediately change to a quote, then setInterval to slow down
     changeQuote();
     let timer = setInterval(changeQuote, changeQuoteInterval);
