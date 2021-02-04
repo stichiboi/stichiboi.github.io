@@ -18,8 +18,8 @@ body {
     --default-max-width: 550px;
 
     position: absolute;
-    top:0;
-    bottom:0;
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
 
@@ -28,18 +28,12 @@ body {
     align-items: center;
     justify-content: center;
 
-    background-image: url("../assets/images/background.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center center;
-    background-size: cover;
-
+    background: var(--color-style1);
     color: var(--color-style1);
     overflow: hidden;
-
 }
 
-.back-contrast{
+.back-contrast {
     background: var(--color-style4);
     padding: 20px 60px;
     border-radius: 100px;
@@ -47,11 +41,11 @@ body {
     box-sizing: border-box;
 }
 
-.info-text{
+.info-text {
     font-size: 20px
 }
 
-#quote-container{
+#quote-container {
     cursor: pointer;
 
     position: absolute;
@@ -68,11 +62,26 @@ body {
     z-index: -1;
 }
 
-#quote-container > .back-contrast{
+#quote-container > .back-contrast {
     position: absolute;
     bottom: -20px;
     width: 0;
     height: max(1em, 100%);
     z-index: -2;
     box-sizing: content-box;
+}
+
+#background-container {
+    z-index: -2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    
+    /*background-image: url("../assets/images/autumn-road.jpg");*/
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
 }

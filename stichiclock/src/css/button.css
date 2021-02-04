@@ -14,8 +14,8 @@
 
     font-size: var(--font-size);
 
-    transition: var(--transition-style-quick);
-    transition-property: transform, background-color;
+    transition: transform var(--transition-style-quick),
+        background-color var(--transition-style);
 }
 
 

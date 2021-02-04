@@ -1,0 +1,49 @@
+{
+  "backgrounds": [
+    {
+      "name": "Autumn road",
+      "author": "Patrick Tomasso",
+      "link": "https://unsplash.com/@impatrickt",
+      "path": "autumn-road.jpg",
+      "style": {
+        "--color-style3": "#D58936"
+      }
+    },
+    {
+      "name": "Arctic Iceberg, reflected",
+      "author": "Annie Spratt",
+      "link": "https://unsplash.com/@anniespratt",
+      "path": "annie-spratt-N46IkbWUvMU-unsplash.jpg",
+      "style": {
+        "--color-style3": "#3A5161"
+      }
+    },
+    {
+      "name": "Cold as ice",
+      "author": "Deborah Diem",
+      "link": "https://unsplash.com/@debidiemski",
+      "path": "deborah-diem-ds_NPvoAzro-unsplash.jpg",
+      "style": {
+        "--color-style3": "#2D728F"
+      }
+    },
+    {
+      "name": "Gävle, Sweden",
+      "author": "Geran de Klerk",
+      "link": "https://unsplash.com/@gerandeklerk",
+      "path": "geran-de-klerk-qzgN45hseN0-unsplash.jpg",
+      "style": {
+        "--color-style3": "#2D728F"
+      }
+    },
+    {
+      "name": "Light day",
+      "author": "Andrew Neel",
+      "link": "https://unsplash.com/@gerandeklerk",
+      "path": "andrew-neel-a_K7R1kugUE-unsplash.jpg",
+      "style": {
+        "--color-style3": "#FAA613"
+      }
+    }
+  ]
+}

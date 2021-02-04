@@ -31,6 +31,7 @@
     },
     "dependencies": {
         "@types/jquery": "^3.5.4",
+        "async-assets-loader": "^1.2.0",
         "flickity": "^2.2.2",
         "jquery": "^3.5.1"
     }

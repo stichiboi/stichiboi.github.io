@@ -63,7 +63,7 @@ function setAlarm(alarm: JQuery) {
     while (delay < 0) {
         delay += 3600 * 24 * 1000
     }
-    console.log({target, delay});
+    // console.log({target, delay});
     displayNotification('Alarm time!', '', delay, () => stopAlarm(alarm)).then(timeout => {
         if (timeout) {
             const id = alarm.attr('data-alarm-id');

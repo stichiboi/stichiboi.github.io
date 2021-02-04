@@ -6,7 +6,7 @@ import {formatTime, toggleStartButton, toggleTime} from "./utils";
 const display = $('#stopwatch .time-display');
 let accumulated = 0;
 
-$('#stopwatch .start').on('click', event => {
+$('#stopwatch .start').on('click', function(event) {
     const button = event.currentTarget;
     toggleStartButton(button);
     toggleTime(display, startStopwatch);
@@ -22,7 +22,6 @@ $('#stopwatch .reset').on('click', () => {
     accumulated = 0;
     display.text(formatTime(0));
 });
-
 
 /**
  * @param id The run ID is required to avoid overlapping:
