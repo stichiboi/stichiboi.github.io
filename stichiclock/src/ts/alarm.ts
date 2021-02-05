@@ -34,7 +34,7 @@ function addAlarm() {
         $(event.currentTarget).parent().remove();
     });
 
-    newAlarm.find('.alarm-time > .time-input').on('keydown', event => {
+    newAlarm.find('.time-input-group > .time-input').on('keydown', event => {
         if (event.key === 'Enter' || event.key === 'Return') {
             setAlarm(newAlarm);
         } else {
@@ -52,7 +52,7 @@ function addAlarm() {
 }
 
 function setAlarm(alarm: JQuery) {
-    const target = convertInputToTime(alarm.find('.alarm-time > .time-input'));
+    const target = convertInputToTime(alarm.find('.time-input-group > .time-input'));
     const now = getCurrentTime().split(':').map((value, index) => {
         return parseInt(value) * Math.pow(60, 2 - index);
     }).reduce((prev, curr) => {

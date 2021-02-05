@@ -51,12 +51,6 @@
     margin: calc(var(--display-spacing) / 2) 0 0 0;
 }
 
-.alarm-time {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .row-alarm > .icon {
     cursor: pointer;
     height: 30px;
