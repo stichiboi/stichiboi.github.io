@@ -8,13 +8,13 @@ const backgrounds = require('../assets/backgrounds.json').backgrounds as Backgro
 import * as AssetLoader from '../../node_modules/async-assets-loader/dist/async-assets-loader.js'
 
 const container = $('#background-container');
-const changeBackgroundInterval = 25000; //in ms
-const fadeDuration = 2000; //30s in ms
+const changeBackgroundInterval = 30000; //in ms
+const fadeDuration = 2000; //in ms
 
 (function () {
     //Immediately change to a quote, then setInterval to slow down
     changeBackground();
-    setTimeout(changeBackground, changeBackgroundInterval);
+    setInterval(changeBackground, changeBackgroundInterval);
 })();
 
 /**
@@ -46,10 +46,7 @@ function setBackground(id: number) {
                 document.body.style.setProperty(key, background.style[key]);
             }
         }
-
-        container.fadeIn(fadeDuration, () => {
-            setTimeout(changeBackground, changeBackgroundInterval);
-        });
+        container.fadeIn(fadeDuration);
     });
 
 }

@@ -2,7 +2,7 @@
     flex: 1 1 auto;
     padding: 20px 40px;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 100px;
+    border-radius: var(--border-radius);
 
     --color-text: var(--color-style5);
     --color-back: var(--color-style3);
@@ -15,7 +15,7 @@
     font-size: var(--font-size);
 
     transition: transform var(--transition-style-quick),
-        background-color var(--transition-style);
+    background-color var(--transition-style);
 }
 
 
@@ -54,11 +54,11 @@
     border: 3px solid var(--color);
     color: var(--color);
     background: none;
-    --size: 50px;
+    --size: calc(var(--font-size) * 2);
     width: var(--size);
     height: var(--size);
     border-radius: var(--size);
-    font-size: calc(var(--size) / 2);
+    font-size: var(--font-size);
 
     display: flex;
     align-items: center;

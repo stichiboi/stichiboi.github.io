@@ -17,6 +17,8 @@ body {
     --transition-style-quick: 0.1s ease;
     --default-max-width: 550px;
 
+    --border-radius: 100px;
+
     position: absolute;
     top: 0;
     bottom: 0;
@@ -36,39 +38,37 @@ body {
 .back-contrast {
     background: var(--color-style4);
     padding: 20px 60px;
-    border-radius: 100px;
+    border-radius: var(--border-radius);
     transition: width var(--transition-style);
     box-sizing: border-box;
 }
 
 .info-text {
-    font-size: 20px
+    font-size: var(--font-size);
 }
 
 #quote-container {
     cursor: pointer;
-
     position: absolute;
-    bottom: 40px;
+    bottom: 20px;
     flex: none;
     display: flex;
     justify-content: center;
-    /*overflow: hidden;*/
-    max-width: 80vw;
+    align-items: center;
+}
+
+#quote-container > .back-contrast {
+    position: absolute;
+    /*Start at 0 to animate on load*/
+    width: 0;
+    height: max(1em, calc(100% + 20px));
+    z-index: -2;
 }
 
 #quote {
     text-align: center;
     z-index: -1;
-}
-
-#quote-container > .back-contrast {
-    position: absolute;
-    bottom: -20px;
-    width: 0;
-    height: max(1em, 100%);
-    z-index: -2;
-    box-sizing: content-box;
+    max-width: 80vw;
 }
 
 #background-container {
@@ -78,10 +78,15 @@ body {
     left: 0;
     width: 100vw;
     height: 100vh;
-    
+
     /*background-image: url("../assets/images/autumn-road.jpg");*/
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center center;
     background-size: cover;
+}
+
+.flickity-slider {
+    display: flex;
+    align-items: center;
 }

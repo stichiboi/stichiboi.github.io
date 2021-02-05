@@ -10,7 +10,8 @@ var flky = new Flickity('.gallery', {
     pageDots: false,
     wrapAround: true,
     dragThreshold: 5,
-    initialIndex: 2,
+    initialIndex: 1,
+    setGallerySize: false,
     on: {
         change: function (index) {
             selectNavIcon(mainNavIcons[index]);
@@ -23,7 +24,7 @@ mainNavIcons.on('click', event => {
     flky.select(mainNavIcons.index(event.currentTarget));
 });
 
-function selectNavIcon(icon:HTMLElement){
+function selectNavIcon(icon: HTMLElement) {
     mainNavIcons.removeClass('is-selected');
     icon.classList.add('is-selected');
 }

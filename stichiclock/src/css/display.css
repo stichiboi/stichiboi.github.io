@@ -1,13 +1,17 @@
 #main-display {
-    box-sizing: border-box;
     width: 100vw;
+    height: 100vh;
+}
+
+.gallery {
+    height: 100%;
 }
 
 .gallery-cell {
     width: 100%;
     max-width: var(--default-max-width);
     /*250px is the height of the nav bar + quote bar*/
-    height: calc(100vh - 250px);
+    /*height: calc(100vh - 250px);*/
 }
 
 .gallery-cell {
@@ -15,7 +19,7 @@
 }
 
 .display {
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -24,10 +28,6 @@
 
 .display > *:not(:first-child) {
     margin: var(--display-spacing) 0 0 0;
-}
-
-.display:not(.toggled) {
-    display: flex;
 }
 
 .display .time-display {
