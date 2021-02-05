@@ -1,6 +1,10 @@
 {
   "quotes": [
     {
+      "q": "I'll be back.",
+      "a": "Arnold Schwarzenegger"
+    },
+    {
       "q": "Do or do not, there is no try.",
       "a": "Master Yoda"
     },
@@ -1127,10 +1131,6 @@
     {
       "q": "Our strength grows out of our weaknesses.",
       "a": "Ralph Waldo Emerson"
-    },
-    {
-      "q": "We must become the change we want to see.",
-      "a": "Mahatma Gandhi"
     },
     {
       "q": "Happiness is found in doing, not merely possessing.",
@@ -3513,10 +3513,6 @@
       "a": "Tomas Eliot"
     },
     {
-      "q": "As long as your going to be thinking anyway, think big.",
-      "a": "Donald Trump"
-    },
-    {
       "q": "Without some goals and some efforts to reach it, no man can live.",
       "a": "John Dewey"
     },
@@ -4609,7 +4605,7 @@
       "a": "Abraham Lincoln"
     },
     {
-      "q": "If you can't feed a hundred people, then feed just one.",
+      "q": "If you can't feed a hundred people, then just feed one.",
       "a": "Mother Teresa"
     },
     {
@@ -6511,10 +6507,6 @@
     {
       "q": "You are never given a wish without also being given the power to make it come true. You may have to work for it, however.",
       "a": "Richard Bach"
-    },
-    {
-      "q": "Kind words can be short and easy to speak, but their echoes are truly endless.",
-      "a": "Mother Teresa"
     },
     {
       "q": "Count your joys instead of your woes. Count your friends instead of your foes.",

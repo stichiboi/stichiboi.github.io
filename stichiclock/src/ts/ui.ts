@@ -1,5 +1,3 @@
-import './quotes'
-import './backgrounds'
 import * as Flickity from '../../node_modules/flickity/dist/flickity.pkgd.min'
 import '../../node_modules/flickity/dist/flickity.min.css'
 

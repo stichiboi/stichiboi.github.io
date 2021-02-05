@@ -8,7 +8,8 @@ const ASSET_PATH = process.env.ASSET_PATH || '';
 
 module.exports = {
     entry: {
-        index: path.resolve(__dirname, './../src/index.js')
+        index: path.resolve(__dirname, './../src/index.js'),
+        visuals: path.resolve(__dirname, './../src/visuals.js'),
     },
 
     output: {
@@ -61,7 +62,7 @@ module.exports = {
             filename: 'index.html',
             template: path.resolve(__dirname, './../src/index.html'),
             inlineSource: '.(js)$',
-            chunks: ['index']
+            chunks: ['index', 'visuals']
         }),
         // new CleanWebpackPlugin(),
     ]
