@@ -27,7 +27,7 @@ function changeQuote(index ?: number) {
     if (id.toString() !== currId) {
         const quote = `${quotes[id].q} - ${quotes[id].a}`;
         quoteDisplay.fadeOut(() => {
-            quoteContainer.css('width', `min(${quote.length * 14}px, 80vw)`);
+            quoteContainer.css('width', `min(${quote.length * 14}px, 90vw)`);
             quoteDisplay.text(quote);
             quoteDisplay.attr('data-quote-id', id);
             quoteDisplay.fadeIn();

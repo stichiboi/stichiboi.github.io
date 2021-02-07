@@ -3,7 +3,7 @@ body {
 
     padding: 20px;
     margin: 0;
-    --color-style1: #221D23;
+    --color-style1: #1C1C1C;
     --color-style2: #A44200;
     --color-style3: #D58936;
     --color-style4: rgba(239, 239, 239, 0.7);;
@@ -19,6 +19,10 @@ body {
 
     --border-radius: 100px;
 
+    background: var(--color-style1);
+}
+
+#main-view {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -30,9 +34,20 @@ body {
     align-items: center;
     justify-content: center;
 
-    background: var(--color-style1);
     color: var(--color-style1);
     overflow: hidden;
+}
+
+#main-view {
+    transition: opacity ease 1s 5s;
+    /*Disappear*/
+    opacity: 0;
+}
+
+#main-view:hover {
+    transition-delay: 0s;
+    transition-duration: 0.2s;
+    opacity: 1;
 }
 
 .back-contrast {
