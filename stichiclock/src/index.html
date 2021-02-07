@@ -8,7 +8,12 @@
 </head>
 <body>
 
-<div id="background-container"></div>
+<div id="background-container">
+    <div class="artist-info back-contrast">
+        <p class="background-title"></p>
+        <a href="" class="artist-link" target="_blank"></a>
+    </div>
+</div>
 
 <main id="main-view">
     <nav id="main-navigation" class="back-contrast">
@@ -74,22 +79,24 @@
         <span id="quote" class="info-text"></span>
     </footer>
 
-    <div id="templates" style="display: none">
-        <div id="row-alarm-template">
-            <div class="row-alarm back-contrast">
-                <svg class="icon remove-alarm">
-                    <use href="./assets/icons/cancel.svg#cancel-icon"></use>
-                </svg>
-                <div class="time-input-group">
-                    <input class="time-input" placeholder="00" type="number" min="0" max="23">
-                    :<input class="time-input" placeholder="00" type="number" min="0" max="59">
-                </div>
-                <button class="alarm-toggle toggle">
-                    <span class="toggle-slider"></span>
-                </button>
+</main>
+
+<div id="templates" style="display: none">
+    <div id="row-alarm-template">
+        <div class="row-alarm back-contrast">
+            <svg class="icon remove-alarm">
+                <use href="./assets/icons/cancel.svg#cancel-icon"></use>
+            </svg>
+            <div class="time-input-group">
+                <input class="time-input" placeholder="00" type="number" min="0" max="23">
+                :<input class="time-input" placeholder="00" type="number" min="0" max="59">
             </div>
+            <button class="alarm-toggle toggle">
+                <span class="toggle-slider"></span>
+            </button>
         </div>
     </div>
-</main>
+</div>
+
 </body>
 </html>

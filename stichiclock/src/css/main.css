@@ -12,6 +12,7 @@ body {
     --color-stop: #D64933;
 
     --font-size: 25px;
+    --font-size-small: 15px;
 
     --transition-style: 0.3s ease;
     --transition-style-quick: 0.1s ease;
@@ -24,10 +25,11 @@ body {
 
 #main-view {
     position: absolute;
-    top: 0;
-    bottom: 0;
     left: 0;
     right: 0;
+    top: 0;
+    /*Leave space for the artist info*/
+    bottom: 50px;
 
     display: flex;
     flex-direction: column;
@@ -56,49 +58,6 @@ body {
     border-radius: var(--border-radius);
     transition: width var(--transition-style);
     box-sizing: border-box;
-}
-
-.info-text {
-    font-size: var(--font-size);
-}
-
-#quote-container {
-    cursor: pointer;
-    position: absolute;
-    bottom: 20px;
-    flex: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#quote-container > .back-contrast {
-    position: absolute;
-    /*Start at 0 to animate on load*/
-    width: 0;
-    height: max(1em, calc(100% + 20px));
-    z-index: -2;
-}
-
-#quote {
-    text-align: center;
-    z-index: -1;
-    max-width: 80vw;
-}
-
-#background-container {
-    z-index: -2;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-
-    /*background-image: url("../assets/images/autumn-road.jpg");*/
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center center;
-    background-size: cover;
 }
 
 .flickity-slider {

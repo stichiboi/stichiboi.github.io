@@ -44,6 +44,24 @@
       "style": {
         "--color-style3": "#FAA613"
       }
+    },
+    {
+      "name": "Oljato-Monument Valley",
+      "author": "Ganapathy Kumar",
+      "link": "https://unsplash.com/@gkumar2175",
+      "path": "ganapathy-kumar-Gl9r22w_Oxk-unsplash.jpg",
+      "style": {
+        "--color-style3": "#5C3FA2"
+      }
+    },
+    {
+      "name": "Rolle Pass",
+      "author": "Damiano Baschiera",
+      "link": "https://unsplash.com/@damiano_baschiera",
+      "path": "damiano-baschiera-d4feocYfzAM-unsplash.jpg",
+      "style": {
+        "--color-style3": "#687E94"
+      }
     }
   ]
 }

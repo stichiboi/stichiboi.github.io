@@ -47,7 +47,7 @@
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 350px) {
     .button-group {
         justify-content: space-between;
         --spacing: 0;

@@ -1,6 +1,6 @@
 #main-display {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 300px);
 }
 
 .gallery {
@@ -8,10 +8,9 @@
 }
 
 .gallery-cell {
+    height: 100%;
     width: 100%;
     max-width: var(--default-max-width);
-    /*250px is the height of the nav bar + quote bar*/
-    /*height: calc(100vh - 250px);*/
 }
 
 .gallery-cell {

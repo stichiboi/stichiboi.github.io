@@ -1,0 +1,71 @@
+#background-container {
+    z-index: -2;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+}
+
+.artist-info {
+    position: absolute;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: var(--font-size-small);
+}
+
+.artist-info > *:not(:first-child) {
+    margin-left: 5px;
+}
+
+.artist-info.back-contrast{
+    width: 0;
+    padding: 0;
+}
+
+.background-title {
+}
+
+.artist-link {
+    color: var(--color-style1);
+}
+
+.info-text {
+    font-size: var(--font-size);
+}
+
+#quote-container {
+    cursor: pointer;
+    position: absolute;
+    bottom: 10px;
+    flex: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#quote-container > .back-contrast {
+    position: absolute;
+    /*Start at 0 to animate on load*/
+    width: 0;
+    height: max(1em, calc(100% + 20px));
+    z-index: -2;
+}
+
+#quote {
+    text-align: center;
+    z-index: -1;
+    max-width: 80vw;
+}
