@@ -1,6 +1,7 @@
 body {
     --color-style1: #1C1C1C;
     --color-style2: #FEFEFE;
+    --color-style3: #737373;
     --font-size-big: min(15vw, 80px);
     --font-size-medium: min(15vw, 35px);
     --font-size: min(10vw, 22px);
@@ -53,4 +54,8 @@ footer {
     --size: 40px;
     height: var(--size);
     width: var(--size);
+}
+
+.icon-group .icon:hover {
+    color: var(--color-style3);
 }
