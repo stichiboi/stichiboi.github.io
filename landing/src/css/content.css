@@ -1,0 +1,83 @@
+.content-container {
+    display: flex;
+    flex-direction: column;
+
+    color: var(--color-style1);
+    background-color: var(--color-style2);
+}
+
+.content {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    --spacing: 30px;
+
+    --image-width: 100%;
+    --text-width: 100%;
+}
+
+.content > *:not(:first-child) {
+    margin-top: var(--spacing);
+}
+
+.content-image {
+    order: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    width: var(--image-width);
+}
+
+.content-image > img {
+    width: 100%;
+    transition: transform var(--transition-style);
+}
+
+.content:hover > .content-image > img {
+    transform: scale(1.1);
+}
+
+.content-text {
+    order: 2;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: var(--text-width);
+
+    --padding: 20px;
+    padding: var(--padding);
+    padding-bottom: calc(var(--spacing) + var(--padding));
+}
+
+.content-text > *:not(:first-child) {
+    padding-top: var(--spacing);
+}
+
+#github-source {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: var(--color-style2);
+    --spacing: 30px 0 0 0;
+}
+
+#github-source > *:not(:first-child) {
+    margin: var(--spacing);
+}
+
+#github-source > .icon {
+    --size: 70px;
+    height: var(--size);
+    width: var(--size);
+}
+
+#github-source > p {
+    text-align: center;
+}
+

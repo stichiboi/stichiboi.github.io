@@ -1,0 +1,22 @@
+h1, h2 {
+    margin: 0;
+    text-transform: lowercase;
+    letter-spacing: 0.05em;
+}
+
+h1 {
+    font-size: var(--font-size-big);
+}
+
+h2 {
+    font-size: var(--font-size-medium);
+}
+
+p {
+    margin: 0;
+    font-size: var(--font-size);
+}
+
+a {
+    color: inherit;
+}
