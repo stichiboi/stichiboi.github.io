@@ -15,10 +15,12 @@ body {
     flex-direction: column;
 
     margin: 0;
+
+    --spacing: 80px 0 0 0;
 }
 
 body > *:not(:first-child) {
-    margin-top: 80px;
+    margin: var(--spacing);
 }
 
 header {
@@ -26,11 +28,34 @@ header {
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     padding: 40px 40px 0 40px;
+
+    --intro-width: 100%;
+    --planetary-width: 100%;
+    --spacing: 80px 0 0 0;
+}
+
+header > *:not(:first-child) {
+    margin: var(--spacing);
+}
+
+#intro {
+    width: var(--intro-width);
+
+    --spacing: 50px 0 0 0;
 }
 
 #intro > *:not(:first-child) {
-    padding-top: 50px;
+    margin: var(--spacing);
+}
+
+#planetary {
+    width: var(--planetary-width);
+
+    display: flex;
+    justify-content: center;
 }
 
 footer {
