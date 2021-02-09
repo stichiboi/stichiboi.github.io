@@ -64,10 +64,10 @@
     align-items: center;
 
     color: var(--color-style2);
-    --spacing: 30px 0 0 0;
 }
 
 #github-source > *:not(:first-child) {
+    --spacing: 30px 0 0 0;
     margin: var(--spacing);
 }
 

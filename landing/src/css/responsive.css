@@ -22,8 +22,11 @@
 
     #github-source {
         flex-direction: row;
-        --spacing: 0 0 0 30px;
         justify-content: center;
+    }
+
+    #github-source > *:not(:first-child) {
+        --spacing: 0 0 0 30px;
     }
 
     #github-source > p {
