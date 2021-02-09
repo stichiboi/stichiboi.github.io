@@ -16,6 +16,11 @@
     align-items: center;
     justify-content: center;
 
+    overflow: visible;
+}
+
+#planetary:hover > .circle{
+    transform: scale(1.1);
 }
 
 .circle {
@@ -31,7 +36,7 @@
     background: var(--planet0);
 
     box-shadow: 0 0 100px var(--shade);
-
+    transition: transform var(--transition-style);
     animation: breathe 7s alternate infinite;
 }
 
