@@ -22,15 +22,17 @@ const quoteContainer = $('#quote-container .back-contrast');
  */
 function changeQuote(index ?: number) {
     const currId = quoteDisplay.attr('data-quote-id');
+    const limit = window.innerHeight > 600 ? 1000 : 50;
+    let id;
+    do {
+        id = Math.floor(Math.random() * quotes.length);
+    } while (quotes[id].q.length > limit || id.toString() === currId);
 
-    const id = index < quotes.length ? index : Math.floor(Math.random() * quotes.length);
-    if (id.toString() !== currId) {
-        const quote = `${quotes[id].q} - ${quotes[id].a}`;
-        quoteDisplay.fadeOut(() => {
-            quoteContainer.css('width', `min(${quote.length * 12}px, 90vw)`);
-            quoteDisplay.text(quote);
-            quoteDisplay.attr('data-quote-id', id);
-            quoteDisplay.fadeIn();
-        });
-    }
+    const quote = `${quotes[id].q} - ${quotes[id].a}`;
+    quoteDisplay.fadeOut(() => {
+        quoteContainer.css('width', `min(${quote.length * 12}px, 90vw)`);
+        quoteDisplay.text(quote);
+        quoteDisplay.attr('data-quote-id', id);
+        quoteDisplay.fadeIn();
+    });
 }

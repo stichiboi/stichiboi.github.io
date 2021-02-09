@@ -1,7 +1,7 @@
 body {
     font-family: "Lato", serif;
 
-    padding: 20px;
+    /*padding: 20px;*/
     margin: 0;
     --color-style1: #1C1C1C;
     --color-style2: #A44200;
@@ -24,29 +24,26 @@ body {
 }
 
 #main-view {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    /*Leave space for the artist info*/
-    bottom: 50px;
+    /*48px is the height of the background info*/
+    height: calc(100vh - 48px);
 
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 
     color: var(--color-style1);
-    overflow: hidden;
-}
+    box-sizing: border-box;
+    padding: 30px 30px 20px;
 
-#main-view {
+    /*Disappear after 5s*/
     transition: opacity ease 1s 5s;
-    /*Disappear*/
     opacity: 0;
 }
 
 #main-view:hover {
+    /*Appear immediately (no delay)*/
     transition-delay: 0s;
     transition-duration: 0.2s;
     opacity: 1;

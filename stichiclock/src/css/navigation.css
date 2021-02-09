@@ -1,7 +1,4 @@
 #main-navigation {
-    position: absolute;
-
-    top: 20px;
     flex: none;
     display: flex;
     flex-direction: column;

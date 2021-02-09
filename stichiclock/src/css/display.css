@@ -30,7 +30,6 @@
 }
 
 .display .time-display {
-
     --font-size: max(min(min(10vw, 10vh), 132px), 30px);
     font-size: var(--font-size);
     letter-spacing: 0.05em;
