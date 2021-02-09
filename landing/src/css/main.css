@@ -51,13 +51,6 @@ header > *:not(:first-child) {
     margin: var(--spacing);
 }
 
-#planetary {
-    width: var(--planetary-width);
-
-    display: flex;
-    justify-content: center;
-}
-
 footer {
     background-color: var(--color-style2);
     color: var(--color-style1);

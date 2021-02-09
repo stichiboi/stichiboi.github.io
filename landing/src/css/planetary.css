@@ -1,5 +1,120 @@
 #planetary {
     height: 400px;
     width: 415px;
+
+    --ring-color: var(--color-style2);
+    --planet0: #F1FAEE;
+    --shade: rgba(230, 57, 70, 0.6);
+    --planet1: #A8DADC;
+    --planet2: #457B9D;
+    --planet3: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #E6AF2E 26.56%, rgba(255, 255, 255, 0) 100%), #632B30;
+    /* #E63B2E;*/
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
+.circle {
+    position: absolute;
+    border-radius: 50%;
+}
+
+#planetary > .circle {
+    --size: 80px;
+    width: var(--size);
+    height: var(--size);
+
+    background: var(--planet0);
+
+    box-shadow: 0 0 100px var(--shade);
+
+    animation: breathe 7s alternate infinite;
+}
+
+#planetary > .ring {
+    position: absolute;
+
+    border-bottom: 1px solid var(--ring-color);
+    border-radius: 50%;
+    --size: 245px;
+    width: var(--size);
+    height: var(--size);
+
+    --planet-color: var(--planet1);
+    --planet-size: 13px;
+
+    --revolution: 10s;
+
+    animation: spin var(--revolution) linear infinite;
+}
+
+#planetary > .ring:nth-child(2) {
+    --size: 320px;
+    --planet-color: var(--planet2);
+    --planet-size: 20px;
+    --revolution: 15s;
+}
+
+#planetary > .ring:nth-child(3) {
+    --size: 400px;
+    --planet-color: var(--planet3);
+    --planet-size: 30px;
+    --revolution: 18s;
+}
+
+#planetary > .ring:nth-child(3) > .circle {
+    animation: spin 15s linear infinite;
+}
+
+.ring > .circle {
+    position: absolute;
+    /*-1px is required to compensate for the border width*/
+    --half-size: calc(var(--planet-size) / -2 - 1px);
+    top: calc(50% + var(--half-size));
+    left: var(--half-size);
+
+    width: var(--planet-size);
+    height: var(--planet-size);
+    background: var(--planet-color);
+}
+
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@-moz-keyframes breathe {
+    100% {
+        box-shadow: 0 0 30px var(--shade);
+    }
+}
+
+@-webkit-keyframes breathe {
+    100% {
+        box-shadow: 0 0 30px var(--shade);
+    }
+}
+
+@keyframes breathe {
+    100% {
+        box-shadow: 0 0 30px var(--shade);
+    }
+}
