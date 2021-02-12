@@ -28,13 +28,20 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|jpg|gif|webp|svg|zip)$/,
+                test: /\.(png|jpg|gif|webp|zip)$/,
                 use: {
-                    loader: "url-loader",
+                    loader: "file-loader",
                     options: {
                         name: '[name].[ext]',
                         outputPath: 'assets'
                     }
+                },
+                exclude: /node_modules/
+            },
+            {
+                test: /\.svg$/,
+                use: {
+                    loader: "url-loader"
                 },
                 exclude: /node_modules/
             },
