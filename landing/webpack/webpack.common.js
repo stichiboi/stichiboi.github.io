@@ -30,9 +30,7 @@ module.exports = {
             {
                 test: /\.(png|jpg|gif|webp|svg|zip)$/,
                 use: {
-                    //Use file-loader rather than url-loader because
-                    // inline svg don't display in older versions of Adobe CEP (17.1.3 and earlier)
-                    loader: "file-loader",
+                    loader: "url-loader",
                     options: {
                         name: '[name].[ext]',
                         outputPath: 'assets'

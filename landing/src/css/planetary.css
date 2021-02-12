@@ -1,6 +1,5 @@
 #planetary {
     height: 400px;
-    width: 415px;
 
     --ring-color: var(--color-style2);
     --planet0: #F1FAEE;
@@ -11,7 +10,7 @@
     /* #E63B2E;*/
 
     position: relative;
-
+    flex: 1 1 auto;
     display: flex;
     align-items: center;
     justify-content: center;
