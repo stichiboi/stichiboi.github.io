@@ -20,10 +20,12 @@ $('#timer .start').on('click', event => {
 });
 
 $('#timer .reset').on('click', () => {
+    display.attr('data-resetted', 'true');
     const initialTime = parseInt(display.attr('data-initial-duration'));
     if (initialTime && !isNaN(initialTime)) {
         setTimeToInput(initialTime);
     }
+    stopTimer();
 });
 
 inputs.on('keydown', event => {
@@ -54,13 +56,12 @@ function setTimerDuration() {
     startTime = Date.now();
     timerDuration = convertInputToTime(inputs);
     if (isDisplayRunning(display)) {
+        //Stop a previous notification
         if (notification) {
             clearTimeout(notification);
         }
-        displayNotification('Timer is up!', ''
-            // + `Start: ${formatTime(startTime)}\n`
-            // + `End: ${formatTime(startTime + timerDuration)}\n`
-            + `Duration: ${formatTime(timerDuration)}`, timerDuration).then(res => {
+        displayNotification('Timer is up!',
+            `Duration: ${formatTime(timerDuration)}`, timerDuration).then(res => {
             if (res) {
                 notification = res;
             }
@@ -89,17 +90,18 @@ function startTimer(id: string) {
             } else {
                 stopTimer();
             }
+        } else {
+            stopTimer();
         }
     }
-
     setTimeout(updateTimer, 900);
 }
 
 function stopTimer() {
-    //Visually stop timer
     $('#timer .stop').trigger('click');
-    //Play sound
-
+    if (notification) {
+        clearInterval(notification);
+    }
 }
 
 function setTimeToInput(ms: number) {
