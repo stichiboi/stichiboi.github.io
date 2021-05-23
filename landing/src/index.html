@@ -16,14 +16,8 @@
     </div>
     <div id="planetary">
         <div class="circle"></div>
-        <div class="ring">
-            <div class="circle"></div>
-        </div>
-        <div class="ring">
-            <div class="circle"></div>
-        </div>
-        <div class="ring">
-            <div class="circle"></div>
+        <div id="planetary-container">
+
         </div>
     </div>
 </header>
@@ -31,7 +25,8 @@
 <main class="content-container">
     <section class="content" onclick="window.open('https://stichiboi.github.io/stichiclock/')">
         <div class="content-image">
-            <img src="assets/images/stichiclock.jpg">
+            <img src="assets/images/stichiclock.jpg"
+                 alt="A screenshot of the StichiClock, a vanillaJS timer/clock/stopwatch utility">
         </div>
         <div class="content-text">
             <h2>Stichiclock</h2>
@@ -68,5 +63,11 @@
         </a>
     </div>
 </footer>
+
+<div id="templates" style="display: none">
+    <div id="ring-template" class="ring">
+        <div class="circle"></div>
+    </div>
+</div>
 </body>
 </html>

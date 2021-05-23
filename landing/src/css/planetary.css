@@ -18,7 +18,7 @@
     overflow: visible;
 }
 
-#planetary:hover > .circle{
+#planetary:hover > .circle {
     transform: scale(1.1);
 }
 
@@ -28,6 +28,7 @@
 }
 
 #planetary > .circle {
+    cursor: pointer;
     --size: 80px;
     width: var(--size);
     height: var(--size);
@@ -39,39 +40,30 @@
     animation: breathe 7s alternate infinite;
 }
 
-#planetary > .ring {
+#planetary-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1;
+}
+
+#planetary-container > .ring {
     position: absolute;
 
     border-bottom: 1px solid var(--ring-color);
     border-radius: 50%;
-    --size: 245px;
+    --size: 0;
     width: var(--size);
     height: var(--size);
 
     --planet-color: var(--planet1);
     --planet-size: 13px;
-
+    --radial-speed: 0;
     --revolution: 10s;
 
+    transition: 0.5s ease;
+    transition-property: width, height, animation-duration;
     animation: spin var(--revolution) linear infinite;
-}
-
-#planetary > .ring:nth-child(2) {
-    --size: 320px;
-    --planet-color: var(--planet2);
-    --planet-size: 20px;
-    --revolution: 15s;
-}
-
-#planetary > .ring:nth-child(3) {
-    --size: 400px;
-    --planet-color: var(--planet3);
-    --planet-size: 30px;
-    --revolution: 18s;
-}
-
-#planetary > .ring:nth-child(3) > .circle {
-    animation: spin 15s linear infinite;
 }
 
 .ring > .circle {
@@ -84,6 +76,7 @@
     width: var(--planet-size);
     height: var(--planet-size);
     background: var(--planet-color);
+    /*animation: spin 15s linear infinite;*/
 }
 
 @-moz-keyframes spin {
