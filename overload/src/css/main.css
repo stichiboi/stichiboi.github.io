@@ -1,0 +1,95 @@
+body {
+    --color-dark: black;
+    --color-light: white;
+    --font-size: 16px;
+    --font-size-big: 24px;
+    --letter-spacing: 0.1em;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--color-dark);
+    color: var(--color-light);
+}
+
+footer {
+    position: absolute;
+    bottom: 30px;
+}
+
+#word-display {
+    --color: var(--color-light);
+    color: var(--color);
+    font-size: var(--font-size-big);
+}
+
+#start-button {
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-light);
+    --size: 24px;
+}
+
+#start-button:not(.playing) > #pause-icon {
+    display: none;
+}
+
+#start-button.playing > #play-icon {
+    display: none;
+}
+
+.circle-loader {
+    --border-width: 5px;
+    --size: 50px;
+    height: var(--size);
+    width: var(--size);
+    border-radius: var(--size);
+    border: var(--border-width) solid transparent;
+    border-bottom: var(--border-width) solid var(--color, var(--color-dark));
+
+    flex: none;
+    transition: 0.1s ease;
+    transition-property: width, margin-left;
+}
+
+.circle-loader.toggled,
+.loading > .circle-loader {
+    align-self: center;
+    animation: 1s spin ease-in-out infinite;
+}
+
+svg {
+    width: var(--size, 16px);
+    height: var(--size, 16px);
+}
+
+button {
+    transition: transform 0.1s ease-in-out;
+    cursor: pointer;
+    outline: none;
+    border: none;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+button:active {
+    transform: scale(0.9);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
