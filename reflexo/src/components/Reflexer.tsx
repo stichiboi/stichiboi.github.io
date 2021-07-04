@@ -50,7 +50,6 @@ export default function Reflexer({
     }
 
     function registerEvent() {
-        console.log(running);
         if (running) {
             const result = validTime ? Date.now() - validTime : 'Invalid result';
             onResult(result);
