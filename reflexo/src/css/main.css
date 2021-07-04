@@ -1,0 +1,200 @@
+body {
+    --color-dark: #272727;
+    --color-light: #F5F5F5;
+    --font-size: 16px;
+    --font-size-big: 24px;
+    --letter-spacing: 0em;
+
+    --icon-size: 24px;
+
+    --spacing: 12px;
+
+    --default-border-radius: 6px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-dark);
+
+    font-family: "Lato", "Roboto", sans-serif;
+}
+
+.full-size {
+    display: flex;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: 0;
+}
+
+.main-ui {
+    z-index: 1;
+    flex: 1 1 auto;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    transition: .2s ease;
+    transition-property: opacity, visibility;
+}
+
+.main-ui.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.main-ui > * {
+    --spacing: 20px;
+}
+
+.main-ui-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 32px;
+
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    align-items: center;
+}
+
+.popup {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .2s ease;
+    transition-property: visibility, opacity, transform;
+
+    display: flex;
+    background: var(--color-light);
+    padding: 24px;
+    border-radius: var(--default-border-radius);
+    box-shadow: 0 4px 24px rgba(65, 65, 65, 0.15);
+}
+
+.popup.toggled {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.popup > * {
+    --spacing: 6px;
+}
+
+.results {
+    display: flex;
+    padding: 10px;
+}
+
+.results > * {
+    --spacing: 10px;
+}
+
+.results-content {
+    display: flex;
+    max-height: calc(19px * 3 + var(--spacing) * 2);
+    overflow: auto;
+}
+
+.text-header {
+    font-weight: bold;
+}
+
+.text-info {
+    font-style: italic;
+}
+
+.settings-container {
+    position: relative;
+}
+
+.settings-container > .popup {
+    align-items: flex-start;
+    position: absolute;
+    bottom: calc(100% + var(--spacing));
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+}
+
+.stepper > * {
+    --spacing: 16px;
+}
+
+.stepper-controls {
+    display: flex;
+    align-items: center;
+}
+
+.stepper-controls > * {
+    --spacing: 10px;
+}
+
+.start-button {
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --size: 72px;
+}
+
+svg {
+    width: var(--size, var(--icon-size, 16px));
+    height: var(--size, var(--icon-size, 16px));
+}
+
+p {
+    margin: 0;
+}
+
+.button-cta {
+    padding: 6px;
+    margin: 0;
+
+    border: 1px solid var(--color-dark);
+    border-radius: var(--default-border-radius);
+    background: none;
+}
+
+.button-cta:hover {
+    background: var(--color-dark);
+    color: var(--color-light);
+}
+
+button {
+    display: flex;
+    font-size: var(--font-size);
+    outline: none;
+    cursor: pointer;
+}
+
+button:not(.button-cta) {
+    background: none;
+    transition: transform 0.1s ease-in-out;
+    border: none;
+}
+
+button:hover:not(.button-cta) {
+    transform: scale(1.1);
+}
+
+button:active:not(.button-cta) {
+    transform: scale(0.9);
+}
+
+.--vertical {
+    flex-direction: column;
+}
+
+.--spacing:not(.--vertical) > *:not(:first-child) {
+    margin-left: var(--spacing);
+}
+
+.--spacing.--vertical > *:not(:first-child) {
+    margin-top: var(--spacing);
+}
