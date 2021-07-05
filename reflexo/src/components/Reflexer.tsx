@@ -60,7 +60,7 @@ export default function Reflexer({
     return (
         <div className={"full-size reflexer"}
              style={{backgroundColor: color}}
-             onClick={registerEvent}
+             onMouseDown={registerEvent}
         />
     )
 }
