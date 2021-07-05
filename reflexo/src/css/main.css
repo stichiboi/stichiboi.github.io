@@ -44,6 +44,11 @@ body {
     visibility: hidden;
 }
 
+.main-ui.hidden .popup {
+    /*This overrides any visible popups*/
+    visibility: hidden !important;
+}
+
 .main-ui > * {
     --spacing: 20px;
 }
