@@ -1,0 +1,96 @@
+.sudoku {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: stretch;
+    justify-content: space-between;
+    --sudoku-padding: 8px;
+    padding: var(--sudoku-padding);
+}
+
+.sudoku > * {
+    display: flex;
+    justify-content: center;
+}
+
+.sudoku-header {
+    display: flex;
+    align-items: center;
+}
+
+.sudoku-header > *:not(:first-child) {
+    margin-left: auto;
+}
+
+.sudoku-board {
+    flex: 1 1 auto;
+    align-items: center;
+}
+
+.sudoku-actions {
+    display: flex;
+}
+
+.sudoku-actions > .button-group {
+    display: flex;
+    justify-content: space-around;
+}
+
+.sudoku-grid {
+    --divisor: 1;
+    position: relative;
+    max-width: calc(min(100vw, 60vh) / var(--divisor));
+    aspect-ratio: 1;
+    flex: 1 1 auto;
+}
+
+.sudoku-grid.small,
+.sudoku-grid .sudoku-grid {
+    --divisor: 3;
+}
+
+.sudoku-grid > .sudoku-line-set:nth-child(2n) {
+    transform: rotateZ(90deg);
+}
+
+.sudoku-line-set {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex: 1 1 auto;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+.sudoku-line-set > hr {
+    width: 100%;
+    margin: 0;
+    border: none;
+    background: var(--color-dark);
+
+    --thickness: calc(3px / var(--divisor));
+    border-radius: calc(var(--thickness) / 2);
+    height: var(--thickness);
+}
+
+.sudoku-grid-contents {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 100%;
+}
+
+.sudoku-grid-contents > .sudoku-grid-content-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.highlight-main {
+    background-color: #457B9D !important;
+}
+
+.highlight-soft {
+    background-color: #A8DADC !important;
+}

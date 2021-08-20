@@ -1,0 +1,59 @@
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    --active-color: var(--color-dark);
+    color: var(--active-color);
+    --de-active-color: var(--color-quiet);
+}
+
+.toggle-container:not(.toggled) > *:last-child {
+    color: var(--de-active-color);
+}
+
+.toggle-container.toggled > *:first-child {
+    color: var(--de-active-color);
+}
+
+.toggle-container > svg {
+    --size: 18px;
+}
+
+.toggle {
+    box-sizing: content-box;
+    --toggle-width: 24px;
+    /*The padding * 2 and border width * 2 will be added to the final height*/
+    --toggle-height: calc(var(--toggle-width) / 2);
+
+    height: var(--toggle-height);
+    width: var(--toggle-width);
+
+    display: flex;
+    align-items: center;
+
+
+    --padding: 1px;
+    padding: var(--padding);
+
+    border: var(--color-dark) 1px solid;
+    border-radius: 100px;
+    background: transparent;
+}
+
+.toggle-slider {
+    --size: var(--toggle-height);
+    height: var(--size);
+    width: var(--size);
+    border-radius: var(--size);
+
+    background-color: var(--color-dark);
+
+    transition: 0.2s ease;
+    transition-property: transform, background-color;
+}
+
+.toggle-container.toggled .toggle-slider,
+.toggle.toggled .toggle-slider {
+    /*Take into account the border width*/
+    transform: translateX(calc(var(--toggle-width) - var(--size)));
+}
