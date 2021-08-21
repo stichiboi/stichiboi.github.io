@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {CELL_HIGHLIGHT, DIFFICULTY, ISudoku} from "../types/types";
-import {Cancel, Check, EditPencil, QuestionMark} from "iconoir-react";
+import {Cancel, Check, EditPencil, QuestionMark, WifiRounded} from "iconoir-react";
 import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
@@ -70,6 +70,15 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
         triggerRender();
     }
 
+    function erase() {
+        if (!selected) return;
+        const cell = sudoku.puzzle[selected.y][selected.x];
+        if (cell.isFixed) return;
+        cell.value = 0;
+        cell.notes.clear();
+        triggerRender();
+    }
+
     function check() {
 
     }
@@ -78,9 +87,6 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
 
     }
 
-    function erase() {
-
-    }
 
     function getHighlight(x: number, y: number): CELL_HIGHLIGHT {
 
@@ -110,7 +116,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
             <section className={"sudoku-actions --spacing"}>
                 <div className={"button-group --vertical"}>
                     <ActionButton icon={<EditPencil/>} onClick={() => setNoteMode(prev => !prev)} isToggled={noteMode}/>
-                    <ActionButton icon={<EditPencil/>} onClick={erase}/>
+                    <ActionButton icon={<WifiRounded/>} onClick={() => erase()}/>
                 </div>
                 <SudokuGrid size={root}
                             isSmall={true}
