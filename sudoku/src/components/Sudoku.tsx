@@ -65,6 +65,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         setStartTime(Date.now() - sudoku.time);
         triggerRender();
         setIsComplete(false);
+        setSelected(undefined);
     }, [_triggerReset]);
 
     useEffect(() => {
@@ -99,13 +100,13 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }
     }, [_triggerCheck]);
 
-    function setNumber(number: number, coords?: ICoords) {
+    function setNumber(number: number, isHint?: boolean, coords?: ICoords) {
         actionWrapper(() => {
             coords ||= selected;
             if (!coords) return;
             const cell = sudoku.puzzle[coords.y][coords.x];
             if (cell.isFixed) return;
-            if (noteMode && !coords) {
+            if (noteMode && !isHint) {
                 if (cell.notes.has(number)) cell.notes.delete(number);
                 else cell.notes.add(number);
             } else {
@@ -114,6 +115,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                 visitDeps(coords.x, coords.y, ((tx, ty) => {
                     sudoku.puzzle[ty][tx].notes.delete(number);
                 }));
+                if (isHint) cell.isFixed = true;
                 triggerCheck();
             }
         }, true);
@@ -146,16 +148,16 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
             loop((x, y) => {
                 if (!sudoku.puzzle[y][x].value) freeCells.push({x, y});
             });
-            for (const c of freeCells) {
-                setNumber(sudoku.solution[c.y][c.x], c);
-                sudoku.puzzle[c.y][c.x].isFixed = true;
-            }
-            // if (freeCells.length) {
-            //     const ind = Math.floor(Math.random() * freeCells.length);
-            //     const coords = freeCells[ind];
-            //     setSelected(coords);
-            //     setNumber(sudoku.solution[coords.y][coords.x], coords);
+            // for (const c of freeCells) {
+            //     setNumber(sudoku.solution[c.y][c.x], c);
+            //     sudoku.puzzle[c.y][c.x].isFixed = true;
             // }
+            if (freeCells.length) {
+                const ind = Math.floor(Math.random() * freeCells.length);
+                const coords = freeCells[ind];
+                setSelected(coords);
+                setNumber(sudoku.solution[coords.y][coords.x], true, coords);
+            }
         });
     }
 
@@ -191,7 +193,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                 <SudokuGrid size={root}
                             isSmall={true}
                             contents={Array.from({length: sudoku.solution.length})
-                                .map((x, i) => <ActionButton icon={i + 1} onClick={() => setNumber(i + 1)}/>)}/>
+                                .map((x, i) => <ActionButton icon={i + 1} onClick={() => setNumber(i + 1)} fill/>)}/>
                 <div className={"button-group --vertical"}>
                     <ActionButton icon={<Check/>} onClick={check}/>
                     <ActionButton icon={<QuestionMark/>} onClick={giveHint}/>

@@ -1,5 +1,5 @@
 import {Board, DIFFICULTY, ICell, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "./types/types";
-import puzzles from './puzzles.json';
+import puzzles from './puzzles-sorted.json';
 
 const SUDOKU_SIZE = 9;
 const SUDOKU_ROOT = Math.floor(Math.sqrt(SUDOKU_SIZE));
@@ -176,3 +176,35 @@ export function visitDeps(x: number, y: number, callback: (tx: number, ty: numbe
             callback(tx, ty);
     });
 }
+
+function gradeSudokus() {
+    Promise.all(puzzles.slice(0, 2500).map(gradeSudoku))
+        .then(res => {
+            console.log('Sorting');
+            res.sort((a, b) => a.score < b.score ? -1 : 1);
+            console.log('Done sorting');
+            console.log(res.map(v => v.s));
+        });
+}
+
+function gradeSudoku(s: string) {
+    return new Promise<{ score: number, s: string }>(resolve => {
+        const board = stringToBoard(s);
+        //TODO Apply transformation
+        const times = 1;
+        //Find solution
+        let total = 0, min = Number.MAX_SAFE_INTEGER, max = 0;
+        for (let i = 0; i < times; i++) {
+            const startTime = Date.now();
+            solve(board);
+            const t = Date.now() - startTime;
+            total += t;
+            min = Math.min(min, t);
+            max = Math.max(max, t);
+        }
+        console.log({avg: total / times, min, max, total});
+        resolve({score: total / times, s});
+    });
+}
+
+// gradeSudokus();

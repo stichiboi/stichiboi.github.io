@@ -1,9 +1,9 @@
 body {
-    --color-dark: #000000;
-    --color-light: #F5F5F5;
-    --color-quiet: #60718A;
-    --color-highlight-soft: #a8dadc;
-    --color-highlight-main: #457B9D;
+    --color-dark: #121212;
+    --color-light: #FFFAFA;
+    --color-quiet: #787D79;
+    --color-highlight-soft: #BBE5ED;
+    --color-highlight-main: #78C0E0;
     --font-size: 16px;
     --font-size-big: 24px;
     --font-size-small: 10px;
@@ -31,8 +31,11 @@ body {
 }
 
 .dark-mode {
-    --color-dark: #F5F5F5;
-    --color-light: #000000;
+    --color-dark: #FFFAFA;
+    --color-light: #121212;
+    --color-quiet: #e1e1e1;
+    --color-highlight-soft: #6380BF;
+    --color-highlight-main: #3961D0;
 }
 
 .full-size {
