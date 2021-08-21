@@ -88,9 +88,9 @@
 }
 
 .highlight-main {
-    background-color: #457B9D !important;
+    background-color: var(--color-highlight-main);
 }
 
 .highlight-soft {
-    background-color: #A8DADC !important;
+    background-color: var(--color-highlight-soft);
 }

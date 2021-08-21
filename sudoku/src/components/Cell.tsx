@@ -7,8 +7,10 @@ export default function Cell({
                                  highlight
                              }: { cell: ICell, onClick: () => unknown, highlight?: CELL_HIGHLIGHT }) {
     return (
-        <button className={`button-action fill ${highlight ? 'highlight-' + CELL_HIGHLIGHT[highlight].toLowerCase() : ''}`} onClick={onClick}>
-            {cell.value !== undefined ? cell.value : cell.notes}
+        <button
+            className={`button-action fill ${highlight ? 'highlight-' + CELL_HIGHLIGHT[highlight].toLowerCase() : ''}`}
+            onClick={onClick}>
+            {cell.value || cell.notes}
         </button>
     )
 }

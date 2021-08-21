@@ -2,6 +2,8 @@ body {
     --color-dark: #000000;
     --color-light: #F5F5F5;
     --color-quiet: #888888;
+    --color-highlight-soft: #a8dadc;
+    --color-highlight-main: #457B9D;
     --font-size: 16px;
     --font-size-big: 24px;
     --letter-spacing: 0em;
@@ -42,7 +44,7 @@ body {
 }
 
 .main-ui {
-      color: var(--color-dark);
+    color: var(--color-dark);
 }
 
 .main-ui.hidden {
@@ -203,11 +205,10 @@ button {
     font-size: var(--font-size);
     outline: none;
     cursor: pointer;
+    background-color: transparent;
 }
 
 button:not(.button-cta) {
-    background-color: transparent;
-    /*transition: transform 0.1s ease-in-out;*/
     border: none;
 }
 

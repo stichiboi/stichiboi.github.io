@@ -7,7 +7,7 @@ export default function ActionButton({
                                      }: { icon: ReactChild, onClick: () => unknown, isToggled?: boolean }) {
 
     return (
-        <button className={`button-action ${isToggled ? 'toggled' : ''}`} onClick={onClick}>
+        <button className={`button-action ${isToggled ? 'highlight-main' : ''}`} onClick={onClick}>
             {icon}
         </button>
     )

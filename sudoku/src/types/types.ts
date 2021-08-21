@@ -1,17 +1,20 @@
 export interface ICell {
     value: number,
-    notes: number[],
+    notes: Set<number>,
     isFixed: boolean
 }
 
 export interface ISudoku {
-    content: ICell[][],
+    puzzle: ICell[][],
     date: Date,
     time: number,
     difficulty: DIFFICULTY,
-    solution: ICell[][]
+    solution: number[][]
 }
 
-export enum DIFFICULTY {Trivial, Easy, Medium, Hard}
+export enum DIFFICULTY {Trivial, Easy, Medium, Hard, __LENGTH}
 
 export enum CELL_HIGHLIGHT {None, Soft, Main, Error}
+
+export class InvalidBoardError extends Error {
+}

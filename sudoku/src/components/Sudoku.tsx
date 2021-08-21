@@ -21,6 +21,9 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     const [timer, setTimer] = useState('--:--');
     const [noteMode, setNoteMode] = useState(false);
     const [selected, setSelected] = useState<ICoords>();
+
+    const [_triggerRender, _setTriggerRender] = useState(false);
+    const triggerRender = useCallback(() => _setTriggerRender(prev => !prev), []);
     const board = useMemo(() => {
         return (
             <SudokuGrid
@@ -34,7 +37,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
                                 const x = j % root + i % root * root;
                                 return (
                                     <Cell
-                                        cell={sudoku.content[y][x]}
+                                        cell={sudoku.puzzle[y][x]}
                                         highlight={getHighlight(x, y)}
                                         onClick={() => setSelected({x, y})}
                                     />);
@@ -44,7 +47,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
                 }
             />
         )
-    }, [selected]);
+    }, [_triggerRender, selected]);
 
     useEffect(() => {
         const id = setInterval(() => {
@@ -55,7 +58,16 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     }, []);
 
     function setNumber(number: number) {
-        console.log(number);
+        if (!selected) return;
+        const cell = sudoku.puzzle[selected.y][selected.x];
+        if (cell.isFixed) return;
+        if (noteMode) {
+            if (cell.notes.has(number)) cell.notes.delete(number);
+            else cell.notes.add(number);
+        } else {
+            cell.value = number;
+        }
+        triggerRender();
     }
 
     function check() {
@@ -71,14 +83,20 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     }
 
     function getHighlight(x: number, y: number): CELL_HIGHLIGHT {
+
         if (!selected) return CELL_HIGHLIGHT.None;
         const sx = selected.x, sy = selected.y;
+        //Is in row or column (or both)
         let high = (x === sx ? 1 : 0) + (y === sy ? 1 : 0);
-        if (!high) {
-            return sudoku.content[sy][sx].value === sudoku.content[y][x].value ?
-                CELL_HIGHLIGHT.Soft : CELL_HIGHLIGHT.None;
-        }
-        return high;
+        if (high) return high;
+        //Same number
+        const currValue = sudoku.puzzle[y][x].value;
+        if (currValue && sudoku.puzzle[sy][sx].value === currValue) return CELL_HIGHLIGHT.Soft
+        //If in same block
+        const bx = Math.floor(x / root), by = Math.floor(y / root);
+        const bsx = Math.floor(sx / root), bsy = Math.floor(sy / root);
+        if (bx === bsx && by === bsy) return CELL_HIGHLIGHT.Soft;
+        return CELL_HIGHLIGHT.None;
     }
 
     return (
