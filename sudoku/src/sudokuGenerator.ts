@@ -1,4 +1,4 @@
-import {DIFFICULTY, ICell, InvalidBoardError, ISudoku} from "./types/types";
+import {Board, DIFFICULTY, ICell, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "./types/types";
 import puzzles from './puzzles.json';
 
 const SUDOKU_SIZE = 9;
@@ -7,9 +7,6 @@ const SUDOKU_ROOT = Math.floor(Math.sqrt(SUDOKU_SIZE));
 // const puzzles = JSON.parse(require('./puzzles.json')) as string[];
 const difficultyRangeSize = puzzles.length / DIFFICULTY.__LENGTH;
 const SUDOKU_SIZE_ARR = Array.from({length: SUDOKU_SIZE});
-type Board = number[][];
-
-enum SUDOKU_VALIDITY {Ok, Empty, InvalidEntry}
 
 export function generateSudoku(difficulty: DIFFICULTY): ISudoku {
     const ind = Math.floor((Math.random() + difficulty) * difficultyRangeSize);
@@ -114,12 +111,13 @@ function solve(board: Board): Board | void {
     throw InvalidBoardError;
 }
 
-function checkValidity(board: Board): SUDOKU_VALIDITY {
+export function checkValidity(board: Board, checkForCompleteness = true): SUDOKU_VALIDITY {
     try {
         //Check filled
-        loop(((x, y) => {
-            if (!board[y][x]) throw InvalidBoardError;
-        }));
+        if (checkForCompleteness)
+            loop(((x, y) => {
+                if (!board[y][x]) throw InvalidBoardError;
+            }));
         //Check rows
         for (let i = 0; i < board.length; i++) {
             const set = new Set<number>();

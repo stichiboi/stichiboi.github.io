@@ -21,7 +21,7 @@ function App() {
 
     const [difficulty, setDifficulty] = useState(DIFFICULTY.Easy);
     const [isDarkMode, setDarkMode] = useState(false);
-    const [sudoku, setSudoku] = useState<undefined | ISudoku>(generateSudoku(difficulty));
+    const [sudoku, setSudoku] = useState<undefined | ISudoku>();
 
     useEffect(() => {
         const body = document.getElementsByTagName('body')[0];
@@ -40,7 +40,9 @@ function App() {
     return (
         <main className={"full-size main-ui"}>
             {sudoku ?
-                <Sudoku sudoku={sudoku} onExit={() => setSudoku(undefined)}/>
+                <Sudoku sudoku={sudoku} onExit={(playAgain) => {
+                    setSudoku(playAgain ? generateSudoku(difficulty) : undefined);
+                }}/>
                 :
                 <div className={"menu --spacing --vertical"}>
                     <div className={"difficulty-picker --vertical --spacing"}>

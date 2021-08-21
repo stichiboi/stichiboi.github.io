@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {CELL_HIGHLIGHT, DIFFICULTY, ISudoku} from "../types/types";
+import {Board, CELL_HIGHLIGHT, DIFFICULTY, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "../types/types";
 import {Cancel, Check, EditPencil, QuestionMark, WifiRounded} from "iconoir-react";
 import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
-import {loop, visitDeps} from "../sudokuGenerator";
+import {checkValidity, loop, visitDeps} from "../sudokuGenerator";
 
 interface ICoords {
     x: number,
@@ -14,8 +14,8 @@ interface ICoords {
 const HINT_PENALTY = 30000; //30 sec
 const CHECK_PENALTY = 30000; //30 sec
 
-export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () => unknown }) {
-    const [startTime, setStartTime] = useState(Date.now() - sudoku.time);
+export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (playAgain?: boolean) => unknown }) {
+    const [, setStartTime] = useState(0);
     const formatTimer = useCallback((timer: number) => {
         const date = new Date(timer);
         const m = date.getMinutes(), s = date.getSeconds();
@@ -25,9 +25,17 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     const [timer, setTimer] = useState('--:--');
     const [noteMode, setNoteMode] = useState(false);
     const [selected, setSelected] = useState<ICoords>();
+    const [isComplete, setIsComplete] = useState(false);
+    const [timerId, setTimerId] = useState(0);
 
-    const [_triggerRender, _setTriggerRender] = useState(false);
-    const triggerRender = useCallback(() => _setTriggerRender(prev => !prev), []);
+    const [_triggerReset, _setTriggerReset] = useState(0);
+    const triggerReset = useCallback(() => _setTriggerReset(prev => ++prev), []);
+
+    const [_triggerCheck, _setTriggerCheck] = useState(0);
+    const triggerCheck = useCallback(() => _setTriggerCheck(prev => ++prev), []);
+
+    const [_triggerRender, _setTriggerRender] = useState(0);
+    const triggerRender = useCallback(() => _setTriggerRender(prev => ++prev), []);
     const board = useMemo(() => {
         return (
             <SudokuGrid
@@ -54,62 +62,102 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     }, [_triggerRender, selected]);
 
     useEffect(() => {
+        setStartTime(Date.now() - sudoku.time);
+        triggerRender();
+        setIsComplete(false);
+    }, [_triggerReset]);
+
+    useEffect(() => {
+        if (timerId) clearInterval(timerId);
         const id = setInterval(() => {
             setStartTime(startTime => {
                 sudoku.time = Date.now() - startTime;
                 setTimer(formatTimer(sudoku.time));
                 return startTime;
             });
-
         }, 500);
+        setTimerId(id as unknown as number);
         return () => clearInterval(id);
-    }, []);
+    }, [_triggerReset]);
+
+    useEffect(() => {
+        if (isComplete) clearInterval(timerId);
+    }, [isComplete]);
+
+    useEffect(() => {
+        try {
+            const asBoard = Array.from({length: sudoku.puzzle.length}).map(() => []) as Board;
+            loop(((x, y) => {
+                const value = sudoku.puzzle[y][x].value;
+                if (!value) throw InvalidBoardError;
+                asBoard[y][x] = value;
+            }));
+            const validity = checkValidity(asBoard, false);
+            if (validity === SUDOKU_VALIDITY.Ok) setIsComplete(true);
+        } catch (e) {
+            //Incomplete
+        }
+    }, [_triggerCheck]);
 
     function setNumber(number: number, coords?: ICoords) {
-        coords ||= selected;
-        if (!coords) return;
-        const cell = sudoku.puzzle[coords.y][coords.x];
-        if (cell.isFixed) return;
-        if (noteMode) {
-            if (cell.notes.has(number)) cell.notes.delete(number);
-            else cell.notes.add(number);
-        } else {
-            cell.value = number;
-            //Remove notes from dependent cells
-            visitDeps(coords.x, coords.y, ((tx, ty) => {
-                sudoku.puzzle[ty][tx].notes.delete(number);
-            }));
-        }
-        triggerRender();
+        actionWrapper(() => {
+            coords ||= selected;
+            if (!coords) return;
+            const cell = sudoku.puzzle[coords.y][coords.x];
+            if (cell.isFixed) return;
+            if (noteMode && !coords) {
+                if (cell.notes.has(number)) cell.notes.delete(number);
+                else cell.notes.add(number);
+            } else {
+                cell.value = number;
+                //Remove notes from dependent cells
+                visitDeps(coords.x, coords.y, ((tx, ty) => {
+                    sudoku.puzzle[ty][tx].notes.delete(number);
+                }));
+                triggerCheck();
+            }
+        }, true);
     }
 
     function erase() {
-        if (!selected) return;
-        const cell = sudoku.puzzle[selected.y][selected.x];
-        if (cell.isFixed) return;
-        cell.value = 0;
-        cell.notes.clear();
-        triggerRender();
+        actionWrapper(() => {
+            if (!selected) return;
+            const cell = sudoku.puzzle[selected.y][selected.x];
+            if (cell.isFixed) return;
+            cell.value = 0;
+            cell.notes.clear();
+        }, true);
     }
 
     function check() {
 
     }
 
-    function giveHint() {
-        setStartTime(prev => prev - HINT_PENALTY);
-        const freeCells = [] as ICoords[];
-        loop((x, y) => {
-            if (!sudoku.puzzle[y][x].value) freeCells.push({x, y});
-        });
-        if (freeCells.length) {
-            const ind = Math.floor(Math.random() * freeCells.length);
-            const coords = freeCells[ind];
-            setSelected(coords);
-            setNumber(sudoku.solution[coords.y][coords.x], coords);
-        }
+    function actionWrapper(callback: () => unknown, needsRender?: boolean) {
+        if (isComplete) return;
+        callback();
+        if (needsRender) triggerRender();
     }
 
+    function giveHint() {
+        actionWrapper(() => {
+            setStartTime(prev => prev - HINT_PENALTY);
+            const freeCells = [] as ICoords[];
+            loop((x, y) => {
+                if (!sudoku.puzzle[y][x].value) freeCells.push({x, y});
+            });
+            for (const c of freeCells) {
+                setNumber(sudoku.solution[c.y][c.x], c);
+                sudoku.puzzle[c.y][c.x].isFixed = true;
+            }
+            // if (freeCells.length) {
+            //     const ind = Math.floor(Math.random() * freeCells.length);
+            //     const coords = freeCells[ind];
+            //     setSelected(coords);
+            //     setNumber(sudoku.solution[coords.y][coords.x], coords);
+            // }
+        });
+    }
 
     function getHighlight(x: number, y: number): CELL_HIGHLIGHT {
         if (!selected) return CELL_HIGHLIGHT.None;
@@ -130,7 +178,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     return (
         <div className={"sudoku --vertical"}>
             <header className={"sudoku-header"}>
-                <ActionButton icon={<Cancel/>} onClick={onExit}/>
+                <ActionButton icon={<Cancel/>} onClick={() => onExit()}/>
                 <h3>{timer}</h3>
                 <h3>{DIFFICULTY[sudoku.difficulty]}</h3>
             </header>
@@ -149,6 +197,16 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
                     <ActionButton icon={<QuestionMark/>} onClick={giveHint}/>
                 </div>
             </section>
+            <div className={`popup sudoku-complete --spacing --vertical ${isComplete ? 'toggled' : ''}`}>
+                <p>{`Completed in ${timer}`}</p>
+                <div className={"button-group --spacing"}>
+                    <button className={"button-cta --quiet"} onClick={() => onExit()}>{"Menu"}</button>
+                    <button className={"button-cta"} onClick={() => {
+                        onExit(true);
+                        triggerReset();
+                    }}>{"Play again"}</button>
+                </div>
+            </div>
         </div>
     );
 }

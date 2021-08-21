@@ -3,8 +3,6 @@
     flex: 1 1 auto;
     align-items: stretch;
     justify-content: space-between;
-    --sudoku-padding: 8px;
-    padding: var(--sudoku-padding);
 }
 
 .sudoku > * {
@@ -106,4 +104,18 @@
 
 .highlight-soft {
     background-color: var(--color-highlight-soft);
+}
+
+.sudoku-complete {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    padding: 32px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sudoku-complete > * {
+    --spacing: 32px;
 }

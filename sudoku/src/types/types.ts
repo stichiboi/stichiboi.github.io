@@ -18,3 +18,7 @@ export enum CELL_HIGHLIGHT {None, Soft, Main, Error}
 
 export class InvalidBoardError extends Error {
 }
+
+export type Board = number[][];
+
+export enum SUDOKU_VALIDITY {Ok, Empty, InvalidEntry}

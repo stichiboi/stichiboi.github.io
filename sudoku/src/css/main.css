@@ -1,7 +1,7 @@
 body {
     --color-dark: #000000;
     --color-light: #F5F5F5;
-    --color-quiet: #888888;
+    --color-quiet: #60718A;
     --color-highlight-soft: #a8dadc;
     --color-highlight-main: #457B9D;
     --font-size: 16px;
@@ -11,7 +11,8 @@ body {
 
     --icon-size: 24px;
 
-    --spacing: 12px;
+    --default-spacing: 12px;
+    --spacing: var(--default-spacing);
 
     --default-border-radius: 2px;
 
@@ -46,6 +47,8 @@ body {
 
 .main-ui {
     color: var(--color-dark);
+    --main-ui-padding: 8px;
+    padding: var(--main-ui-padding);
 }
 
 .main-ui.hidden {
@@ -86,30 +89,21 @@ body {
 .popup {
     visibility: hidden;
     opacity: 0;
-    transform: translateY(20px);
-    transition: .2s ease;
-    transition-property: visibility, opacity, transform;
+    transition: .5s ease;
+    transition-property: opacity, visibility;
 
     display: flex;
     background: var(--color-light);
     padding: 24px;
     border-radius: var(--default-border-radius);
-    box-shadow: 0 4px 24px rgba(65, 65, 65, 0.15);
-
-    max-height: 300px;
-    max-width: 90vw;
-
-    overflow: auto;
+    box-shadow: 0 3px 29px rgba(0, 0, 0, 0.12);
 }
 
 .popup.toggled {
+    transition-property: visibility, opacity;
+
     visibility: visible;
     opacity: 1;
-    transform: translateY(0);
-}
-
-.popup > * {
-    --spacing: 6px;
 }
 
 .text-header {
@@ -174,6 +168,16 @@ h3 {
     font-weight: lighter;
 }
 
+.button-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-group > * {
+    --spacing: var(--default-spacing);
+}
+
 .button-cta {
     border: none;
     padding: 12px;
@@ -226,9 +230,17 @@ button:not(.button-cta) {
     margin-top: var(--spacing);
 }
 
+.button-cta.--quiet {
+    background-color: var(--color-quiet);
+}
+
 .toggle-dark-mode {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: var(--main-ui-padding);
+    right: var(--main-ui-padding);
+    margin: 0 !important;
+}
+
+.toggle-dark-mode > * {
     --spacing: 12px;
 }
