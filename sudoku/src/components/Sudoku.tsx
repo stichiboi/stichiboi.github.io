@@ -4,14 +4,18 @@ import {Cancel, Check, EditPencil, QuestionMark, WifiRounded} from "iconoir-reac
 import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
+import {loop, visitDeps} from "../sudokuGenerator";
 
 interface ICoords {
     x: number,
     y: number
 }
 
+const HINT_PENALTY = 30000; //30 sec
+const CHECK_PENALTY = 30000; //30 sec
+
 export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () => unknown }) {
-    const startTime = useMemo(() => Date.now() - sudoku.time, []);
+    const [startTime, setStartTime] = useState(Date.now() - sudoku.time);
     const formatTimer = useCallback((timer: number) => {
         const date = new Date(timer);
         const m = date.getMinutes(), s = date.getSeconds();
@@ -51,21 +55,30 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
 
     useEffect(() => {
         const id = setInterval(() => {
-            sudoku.time = Date.now() - startTime;
-            setTimer(formatTimer(sudoku.time));
+            setStartTime(startTime => {
+                sudoku.time = Date.now() - startTime;
+                setTimer(formatTimer(sudoku.time));
+                return startTime;
+            });
+
         }, 500);
         return () => clearInterval(id);
     }, []);
 
-    function setNumber(number: number) {
-        if (!selected) return;
-        const cell = sudoku.puzzle[selected.y][selected.x];
+    function setNumber(number: number, coords?: ICoords) {
+        coords ||= selected;
+        if (!coords) return;
+        const cell = sudoku.puzzle[coords.y][coords.x];
         if (cell.isFixed) return;
         if (noteMode) {
             if (cell.notes.has(number)) cell.notes.delete(number);
             else cell.notes.add(number);
         } else {
             cell.value = number;
+            //Remove notes from dependent cells
+            visitDeps(coords.x, coords.y, ((tx, ty) => {
+                sudoku.puzzle[ty][tx].notes.delete(number);
+            }));
         }
         triggerRender();
     }
@@ -84,12 +97,21 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
     }
 
     function giveHint() {
-
+        setStartTime(prev => prev - HINT_PENALTY);
+        const freeCells = [] as ICoords[];
+        loop((x, y) => {
+            if (!sudoku.puzzle[y][x].value) freeCells.push({x, y});
+        });
+        if (freeCells.length) {
+            const ind = Math.floor(Math.random() * freeCells.length);
+            const coords = freeCells[ind];
+            setSelected(coords);
+            setNumber(sudoku.solution[coords.x][coords.y], coords);
+        }
     }
 
 
     function getHighlight(x: number, y: number): CELL_HIGHLIGHT {
-
         if (!selected) return CELL_HIGHLIGHT.None;
         const sx = selected.x, sy = selected.y;
         //Is in row or column (or both)

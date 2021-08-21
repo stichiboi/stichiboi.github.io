@@ -134,7 +134,7 @@ function isValid(board: Board): boolean {
     }
 }
 
-function loop(callback: (x: number, y: number) => unknown) {
+export function loop(callback: (x: number, y: number) => unknown) {
     for (let i = 0; i < SUDOKU_SIZE; i++) {
         for (let j = 0; j < SUDOKU_SIZE; j++) {
             callback(j, i);
@@ -142,7 +142,7 @@ function loop(callback: (x: number, y: number) => unknown) {
     }
 }
 
-function visitDeps(x: number, y: number, callback: (tx: number, ty: number) => unknown) {
+export function visitDeps(x: number, y: number, callback: (tx: number, ty: number) => unknown) {
     const arr = Array.from({length: SUDOKU_SIZE});
     //Visit row
     arr.forEach((_v, tx) => tx !== x && callback(tx, y));
