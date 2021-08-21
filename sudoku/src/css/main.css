@@ -25,8 +25,8 @@ body {
 }
 
 * {
-    transition: .2s ease;
-    transition-property: opacity, visibility, color, background-color;
+    transition: .2s ease-out;
+    transition-property: color, background-color;
 
 }
 
@@ -52,16 +52,6 @@ body {
     color: var(--color-dark);
     --main-ui-padding: 8px;
     padding: var(--main-ui-padding);
-}
-
-.main-ui.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-
-.main-ui.hidden .popup {
-    /*This overrides any visible popups*/
-    visibility: hidden !important;
 }
 
 .menu {
@@ -92,7 +82,7 @@ body {
 .popup {
     visibility: hidden;
     opacity: 0;
-    transition: .5s ease;
+    transition: .5s ease-out;
     transition-property: opacity, visibility;
 
     display: flex;
@@ -103,32 +93,8 @@ body {
 }
 
 .popup.toggled {
-    transition-property: visibility, opacity;
-
     visibility: visible;
     opacity: 1;
-}
-
-.text-header {
-    font-weight: bold;
-}
-
-.text-info {
-    font-style: italic;
-}
-
-.popup-container {
-    position: relative;
-}
-
-.popup-container > .popup {
-    align-items: flex-start;
-    position: absolute;
-    bottom: calc(100% + var(--spacing));
-}
-
-.popup-container:last-child > .popup {
-    right: 0;
 }
 
 .stepper {
@@ -190,11 +156,6 @@ h3 {
     color: var(--color-light);
 }
 
-.button-cta:hover {
-    background: var(--color-dark);
-    color: var(--color-light);
-}
-
 .button-action {
     display: flex;
     justify-content: center;
@@ -211,7 +172,6 @@ h3 {
 button {
     display: flex;
     font-size: var(--font-size);
-    /*outline: none;*/
     cursor: pointer;
     background-color: transparent;
     padding: 0;
