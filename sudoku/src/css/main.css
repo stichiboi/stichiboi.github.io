@@ -6,6 +6,7 @@ body {
     --color-highlight-main: #457B9D;
     --font-size: 16px;
     --font-size-big: 24px;
+    --font-size-small: 10px;
     --letter-spacing: 0em;
 
     --icon-size: 24px;
@@ -203,9 +204,10 @@ h3 {
 button {
     display: flex;
     font-size: var(--font-size);
-    outline: none;
+    /*outline: none;*/
     cursor: pointer;
     background-color: transparent;
+    padding: 0;
 }
 
 button:not(.button-cta) {

@@ -87,6 +87,19 @@
     padding: 4px;
 }
 
+.cell-notes {
+    color: var(--color-quiet);
+    font-size: var(--font-size-small);
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.--fixed {
+    font-weight: bold;
+}
+
 .highlight-main {
     background-color: var(--color-highlight-main);
 }
