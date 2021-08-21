@@ -106,7 +106,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: () =
             const ind = Math.floor(Math.random() * freeCells.length);
             const coords = freeCells[ind];
             setSelected(coords);
-            setNumber(sudoku.solution[coords.x][coords.y], coords);
+            setNumber(sudoku.solution[coords.y][coords.x], coords);
         }
     }
 

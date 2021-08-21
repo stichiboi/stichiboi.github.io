@@ -2,10 +2,14 @@ import {DIFFICULTY, ICell, InvalidBoardError, ISudoku} from "./types/types";
 import puzzles from './puzzles.json';
 
 const SUDOKU_SIZE = 9;
+const SUDOKU_ROOT = Math.floor(Math.sqrt(SUDOKU_SIZE));
+
 // const puzzles = JSON.parse(require('./puzzles.json')) as string[];
 const difficultyRangeSize = puzzles.length / DIFFICULTY.__LENGTH;
 const SUDOKU_SIZE_ARR = Array.from({length: SUDOKU_SIZE});
 type Board = number[][];
+
+enum SUDOKU_VALIDITY {Ok, Empty, InvalidEntry}
 
 export function generateSudoku(difficulty: DIFFICULTY): ISudoku {
     const ind = Math.floor((Math.random() + difficulty) * difficultyRangeSize);
@@ -14,7 +18,10 @@ export function generateSudoku(difficulty: DIFFICULTY): ISudoku {
     //TODO Apply transformation
 
     //Find solution
+    const startTime = Date.now();
     const solution = solve(board);
+    const solveTime = Date.now() - startTime;
+    console.log(`Solve time: ${solveTime}ms`);
 
     //Convert board to ICell[][]
     const puzzle = SUDOKU_SIZE_ARR.map(() => [] as ICell[]);
@@ -41,7 +48,6 @@ function stringToBoard(s: string): Board {
 }
 
 function solve(board: Board): Board | void {
-
     //Generate 3D array, SUDOKU_SIZE^3. The most nested dimension keeps track of which numbers are allowed, based on array index
     const possibleValues = SUDOKU_SIZE_ARR.map((_v, y) => {
         return SUDOKU_SIZE_ARR.map((_v, x) => {
@@ -95,42 +101,57 @@ function solve(board: Board): Board | void {
         //Else return call recursively
         //If the recursive is successful, return it
         //Else remove the set value and try another one
-        if (isValid(tempBoard)) return tempBoard;
-        try {
-            return solve(tempBoard);
-        } catch (e) {
-            //Invalid board
+        const validity = checkValidity(tempBoard);
+        if (validity === SUDOKU_VALIDITY.Ok) return tempBoard;
+        else if (validity === SUDOKU_VALIDITY.Empty) {
+            try {
+                return solve(tempBoard);
+            } catch (e) {
+                //Invalid board
+            }
         }
     }
     throw InvalidBoardError;
 }
 
-//
-// function transformBoard(board: Board): Board {
-//
-// }
-//
-// function rotate(board: Board): Board {
-//
-// }
-//
-// function switchRows(board: Board): Board {
-//
-// }
-//
-// function switchColumns(board: Board): Board {
-//
-// }
-
-function isValid(board: Board): boolean {
-    //TODO Check that the numbers respect the sudoku rules
+function checkValidity(board: Board): SUDOKU_VALIDITY {
     try {
-        loop((x, y) => {
+        //Check filled
+        loop(((x, y) => {
             if (!board[y][x]) throw InvalidBoardError;
-        });
-        return true;
+        }));
+        //Check rows
+        for (let i = 0; i < board.length; i++) {
+            const set = new Set<number>();
+            for (let j = 0; j < board[i].length; j++) {
+                set.add(board[i][j]);
+            }
+            if (set.size !== SUDOKU_SIZE) return SUDOKU_VALIDITY.InvalidEntry;
+        }
+        //Check columns
+        for (let i = 0; i < board.length; i++) {
+            const set = new Set<number>();
+            for (let j = 0; j < board[i].length; j++) {
+                set.add(board[j][i]);
+            }
+            if (set.size !== SUDOKU_SIZE) return SUDOKU_VALIDITY.InvalidEntry;
+        }
+        //Check squares
+        for (let i = 0; i < SUDOKU_SIZE; i++) {
+            const set = new Set<number>();
+            const bx = i % SUDOKU_ROOT * SUDOKU_ROOT;
+            const by = Math.floor(i / SUDOKU_ROOT) * SUDOKU_ROOT;
+            for (let j = 0; j < SUDOKU_SIZE; j++) {
+                const x = j % SUDOKU_ROOT + bx;
+                const y = Math.floor(j / SUDOKU_ROOT) + by;
+                set.add(board[y][x]);
+            }
+            if (set.size !== SUDOKU_SIZE) return SUDOKU_VALIDITY.InvalidEntry;
+        }
+
+        return SUDOKU_VALIDITY.Ok;
     } catch (e) {
-        return false;
+        return SUDOKU_VALIDITY.Empty;
     }
 }
 
@@ -143,17 +164,15 @@ export function loop(callback: (x: number, y: number) => unknown) {
 }
 
 export function visitDeps(x: number, y: number, callback: (tx: number, ty: number) => unknown) {
-    const arr = Array.from({length: SUDOKU_SIZE});
     //Visit row
-    arr.forEach((_v, tx) => tx !== x && callback(tx, y));
+    SUDOKU_SIZE_ARR.forEach((_v, tx) => tx !== x && callback(tx, y));
     //Visit column
-    arr.forEach((_v, ty) => ty !== y && callback(x, ty));
+    SUDOKU_SIZE_ARR.forEach((_v, ty) => ty !== y && callback(x, ty));
     //Visit square
-    const root = Math.floor(Math.sqrt(SUDOKU_SIZE));
-    const sx = Math.floor(x / root) * root, sy = Math.floor(y / root) * root;
-    arr.forEach((_v, i) => {
-        const tx = sx + i % root;
-        const ty = sy + Math.floor(i / root);
+    const sx = Math.floor(x / SUDOKU_ROOT) * SUDOKU_ROOT, sy = Math.floor(y / SUDOKU_ROOT) * SUDOKU_ROOT;
+    SUDOKU_SIZE_ARR.forEach((_v, i) => {
+        const tx = sx + i % SUDOKU_ROOT;
+        const ty = sy + Math.floor(i / SUDOKU_ROOT);
         //Use && instead of || to avoid double checking cells in the same row and column
         if (tx !== x && ty !== y)
             callback(tx, ty);
