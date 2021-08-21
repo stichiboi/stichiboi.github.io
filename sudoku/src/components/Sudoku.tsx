@@ -1,15 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useState} from "react";
-import {Board, CELL_HIGHLIGHT, DIFFICULTY, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "../types/types";
+import {Board, CELL_HIGHLIGHT, DIFFICULTY, ICoords, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "../types/types";
 import {Cancel, Check, EditPencil, QuestionMark, WifiRounded} from "iconoir-react";
 import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
-import {checkValidity, loop, visitDeps} from "../sudokuGenerator";
-
-interface ICoords {
-    x: number,
-    y: number
-}
+import {checkValidity, getFreeCells, loop, visitDeps} from "../sudokuGenerator";
 
 const HINT_PENALTY = 30000; //30 sec
 const CHECK_PENALTY = 30000; //30 sec
@@ -100,6 +95,36 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }
     }, [_triggerCheck]);
 
+
+    useEffect(() => {
+        function keyboardEventListener(event: KeyboardEvent) {
+            setSelected(prev => {
+                if (!prev) return;
+                const number = parseInt(event.key);
+                if (!isNaN(number)) {
+                    if (number === 0) erase();
+                    else setNumber(number, false, prev);
+                } else if (event.key.indexOf('Arrow') !== -1) {
+                    switch (event.key) {
+                        case "ArrowUp":
+                            return {x: prev.x, y: prev.y - 1 < 0 ? sudoku.puzzle.length - 1 : prev.y - 1};
+                        case "ArrowDown":
+                            return {x: prev.x, y: (prev.y + 1) % sudoku.puzzle.length};
+                        case "ArrowLeft":
+                            return {y: prev.y, x: prev.x - 1 < 0 ? sudoku.puzzle.length - 1 : prev.x - 1};
+                        case "ArrowRight":
+                            return {y: prev.y, x: (prev.x + 1) % sudoku.puzzle.length};
+                    }
+                }
+                return prev;
+            });
+        }
+
+        document.addEventListener('keydown', keyboardEventListener);
+        return () => document.removeEventListener('keydown', keyboardEventListener);
+    }, []);
+
+
     function setNumber(number: number, isHint?: boolean, coords?: ICoords) {
         actionWrapper(() => {
             coords ||= selected;
@@ -121,10 +146,11 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }, true);
     }
 
-    function erase() {
+    function erase(coords?: ICoords) {
         actionWrapper(() => {
-            if (!selected) return;
-            const cell = sudoku.puzzle[selected.y][selected.x];
+            coords ||= selected;
+            if (!coords) return;
+            const cell = sudoku.puzzle[coords.y][coords.x];
             if (cell.isFixed) return;
             cell.value = 0;
             cell.notes.clear();
@@ -144,10 +170,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
     function giveHint() {
         actionWrapper(() => {
             setStartTime(prev => prev - HINT_PENALTY);
-            const freeCells = [] as ICoords[];
-            loop((x, y) => {
-                if (!sudoku.puzzle[y][x].value) freeCells.push({x, y});
-            });
+            const freeCells = getFreeCells(sudoku.puzzle);
             // for (const c of freeCells) {
             //     setNumber(sudoku.solution[c.y][c.x], c);
             //     sudoku.puzzle[c.y][c.x].isFixed = true;

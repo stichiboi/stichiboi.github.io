@@ -1,5 +1,5 @@
-import {Board, DIFFICULTY, ICell, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "./types/types";
-import puzzles from './puzzles-sorted.json';
+import {Board, DIFFICULTY, ICell, ICoords, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "./types/types";
+import puzzles from './puzzles.json';
 
 const SUDOKU_SIZE = 9;
 const SUDOKU_ROOT = Math.floor(Math.sqrt(SUDOKU_SIZE));
@@ -27,8 +27,10 @@ export function generateSudoku(difficulty: DIFFICULTY): ISudoku {
             value: board[y][x],
             notes: new Set<number>(),
             isFixed: !!board[y][x]
-        } as ICell);
+        } as ICell
+    );
 
+    setHints(puzzle, solution, Math.round((DIFFICULTY.__LENGTH - difficulty) * 4 ));
     return {
         date: new Date(), difficulty, time: 0,
         puzzle, solution
@@ -44,7 +46,7 @@ function stringToBoard(s: string): Board {
     return board;
 }
 
-function solve(board: Board): Board | void {
+function solve(board: Board): Board {
     //Generate 3D array, SUDOKU_SIZE^3. The most nested dimension keeps track of which numbers are allowed, based on array index
     const possibleValues = SUDOKU_SIZE_ARR.map((_v, y) => {
         return SUDOKU_SIZE_ARR.map((_v, x) => {
@@ -109,6 +111,26 @@ function solve(board: Board): Board | void {
         }
     }
     throw InvalidBoardError;
+}
+
+function setHints(puzzle: ICell[][], solution: Board, count: number) {
+    const freeCells = getFreeCells(puzzle);
+    for (let i = 0; i < count && freeCells.length; i++) {
+        const ind = Math.floor(Math.random() * freeCells.length);
+        const c = freeCells[ind];
+        const cell = puzzle[c.y][c.x];
+        cell.value = solution[c.y][c.x];
+        cell.isFixed = true;
+        freeCells.splice(ind, 1);
+    }
+}
+
+export function getFreeCells(puzzle: ICell[][]): ICoords[] {
+    const freeCells = [] as ICoords[];
+    loop((x, y) => {
+        if (!puzzle[y][x].value) freeCells.push({x, y});
+    });
+    return freeCells;
 }
 
 export function checkValidity(board: Board, checkForCompleteness = true): SUDOKU_VALIDITY {

@@ -22,3 +22,8 @@ export class InvalidBoardError extends Error {
 export type Board = number[][];
 
 export enum SUDOKU_VALIDITY {Ok, Empty, InvalidEntry}
+
+export interface ICoords {
+    x: number,
+    y: number
+}
