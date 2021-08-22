@@ -10,6 +10,8 @@
     cursor: pointer;
     display: flex;
     flex-direction: column;
+    max-height: 100vw;
+
     --spacing: 30px;
 
     --image-width: 100%;
@@ -18,14 +20,6 @@
 
 .content > *:not(:first-child) {
     margin-top: var(--spacing);
-}
-
-.content:nth-child(even) > .content-image {
-    order: 2;
-}
-
-.content:nth-child(even) > .content-text {
-    order: 1;
 }
 
 .content-image {
@@ -43,7 +37,7 @@
 }
 
 .content:hover > .content-image > img {
-    transform: scale(1.1);
+    transform: scale(1.02);
 }
 
 .content-text {

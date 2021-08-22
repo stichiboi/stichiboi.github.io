@@ -19,6 +19,14 @@
         --text-width: 40%;
     }
 
+    .content:nth-child(even) > .content-image {
+        order: 2;
+    }
+
+    .content:nth-child(even) > .content-text {
+        order: 1;
+    }
+
 
     #github-source {
         flex-direction: row;
