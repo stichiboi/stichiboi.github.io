@@ -5,8 +5,81 @@
     <title>Stichiboi | Creative Developer</title>
     <link href='https://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <style>
+        body > * {
+            transition: 1s ease-out;
+            transition-property: opacity, visibility;
+        }
+
+        body > *:not(#page-loader) {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        #page-loader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dot {
+            --size: 6px;
+            border-radius: var(--size);
+            width: var(--size);
+            height: var(--size);
+            background: #FEFEFE;
+            --duration: 1s;
+            --delay: 0s;
+            --pause-delay: 0.7s;
+            animation: wave calc(var(--duration) + var(--pause-delay)) infinite var(--delay);
+        }
+
+        .dot:not(:first-child) {
+            margin-left: 12px;
+        }
+
+        .dot:nth-child(2) {
+            --delay: calc(var(--duration) / 5);
+        }
+
+        .dot:nth-child(3) {
+            --delay: calc(var(--duration) / 5 * 2);
+        }
+
+        .dot:nth-child(4) {
+            --delay: calc(var(--duration) / 5 * 3);
+        }
+
+        .dot:nth-child(5) {
+            --delay: calc(var(--duration) / 5 * 4);
+        }
+
+        @keyframes wave {
+            0% {
+                transform: translateY(0);
+                animation-timing-function: ease-out;
+            }
+            25% {
+                transform: translateY(-24px);
+                animation-timing-function: ease-in;
+            }
+            50% {
+                transform: translateY(0px);
+                animation-timing-function: ease-out;
+            }
+        }
+    </style>
 </head>
-<body>
+<body style="background: #1C1C1C;">
+<div id="page-loader">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+</div>
 <header>
     <div id="intro">
         <h1>Stichiboi</h1>

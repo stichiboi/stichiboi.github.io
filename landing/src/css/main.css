@@ -20,8 +20,20 @@ body {
     --spacing: 80px 0 0 0;
 }
 
+body.is-loaded > *:not(#page-loader) {
+    /*Set !important to override inline styles*/
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
 body > *:not(:first-child) {
     margin: var(--spacing);
+}
+
+#page-loader.fade-out {
+    transition-duration: 0.2s;
+    opacity: 0;
+    visibility: hidden;
 }
 
 header {
