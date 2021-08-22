@@ -1,7 +1,7 @@
 #planetary {
     height: 400px;
 
-    --ring-color: var(--color-style2);
+    --ring-color: var(--color-style4);
     --planet0: #F1FAEE;
     --shade: rgba(230, 57, 70, 0.6);
     --planet1: #A8DADC;
@@ -50,11 +50,11 @@
 #planetary-container > .ring {
     position: absolute;
 
-    border-bottom: 1px solid var(--ring-color);
-    border-radius: 50%;
     --size: 0;
     width: var(--size);
     height: var(--size);
+    border-radius: calc(var(--size) / 2);
+    border: 1px solid var(--ring-color);
 
     --planet-color: var(--planet1);
     --planet-size: 13px;

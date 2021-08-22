@@ -17,6 +17,10 @@ p {
     font-size: var(--font-size);
 }
 
+*:not(.content-text) > p {
+    color: var(--color-style5);
+}
+
 a {
     color: inherit;
 }
