@@ -94,6 +94,12 @@
     flex-wrap: wrap;
 }
 
+.sudoku-missing-count {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 .--fixed {
     font-weight: bold;
 }
@@ -104,6 +110,10 @@
 
 .highlight-soft {
     background-color: var(--color-highlight-soft);
+}
+
+.highlight-error {
+    background-color: var(--color-error);
 }
 
 .sudoku-complete {

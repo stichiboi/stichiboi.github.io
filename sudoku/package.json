@@ -1,12 +1,11 @@
 {
     "name": "stichiclock",
     "version": "1.0.0",
-    "description": "Stichiclock",
+    "description": "Sudoku web app",
     "main": "src/index.js",
     "scripts": {
         "build": "webpack --config webpack/webpack.dev.js",
         "watch": "webpack --config webpack/webpack.dev.js --watch",
-        "local": "webpack --config webpack/webpack.local.js --watch",
         "production": "webpack --config webpack/webpack.prod.js"
     },
     "keywords": [
@@ -16,6 +15,10 @@
     ],
     "author": "DANM",
     "license": "ISC",
+    "browserslist": [
+        "> 1%",
+        "last 5 versions"
+    ],
     "devDependencies": {
         "@babel/core": "^7.14.0",
         "@babel/preset-env": "^7.14.0",
@@ -29,6 +32,8 @@
         "file-loader": "^6.2.0",
         "html-loader": "^1.3.2",
         "html-webpack-plugin": "^4.5.0",
+        "postcss-loader": "^6.1.1",
+        "postcss-preset-env": "^6.7.0",
         "style-loader": "^2.0.0",
         "ts-loader": "^8.0.11",
         "typescript": "^4.1.3",

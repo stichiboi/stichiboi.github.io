@@ -1,7 +1,8 @@
 export interface ICell {
     value: number,
     notes: Set<number>,
-    isFixed: boolean
+    isFixed: boolean,
+    isError: boolean
 }
 
 export interface ISudoku {

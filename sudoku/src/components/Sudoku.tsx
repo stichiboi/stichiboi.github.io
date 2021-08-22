@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {Board, CELL_HIGHLIGHT, DIFFICULTY, ICoords, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "../types/types";
-import {Cancel, Check, EditPencil, QuestionMark, WifiRounded} from "iconoir-react";
+import {Cancel, Check, EditPencil, QuestionMark, Undo} from "iconoir-react";
 import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
@@ -18,19 +18,108 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
     }, []);
     const root = useMemo(() => Math.floor(Math.sqrt(sudoku.solution.length)), [sudoku.solution]);
     const [timer, setTimer] = useState('--:--');
-    const [noteMode, setNoteMode] = useState(false);
-    const [selected, setSelected] = useState<ICoords>();
+    const noteMode = useRef(false);
+    const selected = useRef<ICoords>();
     const [isComplete, setIsComplete] = useState(false);
     const [timerId, setTimerId] = useState(0);
-
-    const [_triggerReset, _setTriggerReset] = useState(0);
-    const triggerReset = useCallback(() => _setTriggerReset(prev => ++prev), []);
+    const [numberCount, setNumberCount] = useState({} as { [key: number]: number });
 
     const [_triggerCheck, _setTriggerCheck] = useState(0);
     const triggerCheck = useCallback(() => _setTriggerCheck(prev => ++prev), []);
 
     const [_triggerRender, _setTriggerRender] = useState(0);
     const triggerRender = useCallback(() => _setTriggerRender(prev => ++prev), []);
+
+    const actionWrapper = useCallback((callback: () => unknown, needsRender?: boolean) => {
+        if (isComplete) return;
+        callback();
+        if (needsRender) triggerRender();
+    }, [sudoku, isComplete]);
+
+    const setNumber = useCallback((number: number, coords: ICoords | undefined, isHint?: boolean) => {
+        actionWrapper(() => {
+            if (!coords) return;
+            const cell = sudoku.puzzle[coords.y][coords.x];
+            if (cell.isFixed) return;
+            if (noteMode.current && !isHint) {
+                if (cell.notes.has(number)) cell.notes.delete(number);
+                else cell.notes.add(number);
+            } else {
+                if (number !== cell.value) {
+                    recordNumberCount(cell.value, -1);
+                    recordNumberCount(number);
+                    cell.isError = false;
+                    cell.value = number;
+                    //Remove notes from dependent cells
+                    visitDeps(coords.x, coords.y, ((tx, ty) => {
+                        sudoku.puzzle[ty][tx].notes.delete(number);
+                    }));
+                    triggerCheck();
+                }
+                if (isHint) cell.isFixed = true;
+            }
+        }, true);
+    }, [sudoku]);
+
+    const erase = useCallback((coords: ICoords | undefined) => {
+        actionWrapper(() => {
+            if (!coords) return;
+            const cell = sudoku.puzzle[coords.y][coords.x];
+            if (cell.isFixed) return;
+            recordNumberCount(cell.value, -1);
+            cell.value = 0;
+            cell.notes.clear();
+            cell.isError = false;
+        }, true);
+    }, [sudoku]);
+
+    const check = useCallback(() => {
+        actionWrapper(() => {
+            setStartTime(prev => prev - CHECK_PENALTY);
+            loop(((x, y) => {
+                const cell = sudoku.puzzle[y][x];
+                if (cell.value && cell.value !== sudoku.solution[y][x]) {
+                    cell.isError = true;
+                }
+            }));
+        }, true);
+    }, [sudoku]);
+
+    const giveHint = useCallback(() => {
+        actionWrapper(() => {
+            setStartTime(prev => prev - HINT_PENALTY);
+            const freeCells = getFreeCells(sudoku.puzzle);
+            // for (const c of freeCells) {
+            //     setNumber(sudoku.solution[c.y][c.x], c);
+            //     sudoku.puzzle[c.y][c.x].isFixed = true;
+            // }
+            if (freeCells.length) {
+                const ind = Math.floor(Math.random() * freeCells.length);
+                const coords = freeCells[ind];
+                selected.current = coords;
+                setNumber(sudoku.solution[coords.y][coords.x], coords, true);
+            }
+        });
+    }, [sudoku]);
+
+    const getHighlight = useCallback((x: number, y: number) => {
+        const cell = sudoku.puzzle[y][x];
+        if (cell.isError) return CELL_HIGHLIGHT.Error;
+        if (!selected.current) return CELL_HIGHLIGHT.None;
+        const sx = selected.current.x, sy = selected.current.y;
+        //Is in row or column (or both)
+        let high = (x === sx ? 1 : 0) + (y === sy ? 1 : 0);
+        if (high) return high;
+        //Same number
+        const currValue = cell.value;
+        if (currValue && sudoku.puzzle[sy][sx].value === currValue) return CELL_HIGHLIGHT.Soft
+        //If in same block
+        const bx = Math.floor(x / root), by = Math.floor(y / root);
+        const bsx = Math.floor(sx / root), bsy = Math.floor(sy / root);
+        if (bx === bsx && by === bsy) return CELL_HIGHLIGHT.Soft;
+        return CELL_HIGHLIGHT.None;
+    }, [sudoku]);
+
     const board = useMemo(() => {
         return (
             <SudokuGrid
@@ -46,7 +135,10 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                                     <Cell
                                         cell={sudoku.puzzle[y][x]}
                                         highlight={getHighlight(x, y)}
-                                        onClick={() => setSelected({x, y})}
+                                        onClick={() => {
+                                            selected.current = {x, y}
+                                            triggerRender();
+                                        }}
                                     />);
                             })
                         }
@@ -54,16 +146,30 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                 }
             />
         )
-    }, [_triggerRender, selected]);
+    }, [_triggerRender]);
+
+    const controls = useMemo(() => {
+        return (
+            <SudokuGrid size={root}
+                        isSmall={true}
+                        contents={Array.from({length: sudoku.solution.length})
+                            .map((x, i) => (
+                                <button className={"button-action fill"}
+                                        onClick={() => setNumber(i + 1, selected.current)}>
+                                    <p>{i + 1}</p>
+                                    <div className={"cell-notes sudoku-missing-count"}>
+                                        {sudoku.puzzle.length - numberCount[i + 1] || 0}
+                                    </div>
+                                </button>
+                            ))}/>
+        )
+    }, [sudoku, numberCount])
 
     useEffect(() => {
         setStartTime(Date.now() - sudoku.time);
         triggerRender();
         setIsComplete(false);
-        setSelected(undefined);
-    }, [_triggerReset]);
-
-    useEffect(() => {
+        selected.current = undefined;
         if (timerId) clearInterval(timerId);
         const id = setInterval(() => {
             setStartTime(startTime => {
@@ -74,7 +180,16 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }, 500);
         setTimerId(id as unknown as number);
         return () => clearInterval(id);
-    }, [_triggerReset]);
+    }, [sudoku]);
+
+    useEffect(() => {
+        const temp = {} as { [key: number]: number };
+        loop(((x, y) => {
+            const value = sudoku.puzzle[y][x].value;
+            temp[value] = (temp[value] || 0) + 1;
+        }));
+        setNumberCount(temp);
+    }, [sudoku]);
 
     useEffect(() => {
         if (isComplete) clearInterval(timerId);
@@ -95,128 +210,78 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }
     }, [_triggerCheck]);
 
-
+    //Event listeners
     useEffect(() => {
         function keyboardEventListener(event: KeyboardEvent) {
-            setSelected(prev => {
-                if (!prev) return;
-                const number = parseInt(event.key);
-                if (!isNaN(number)) {
-                    if (number === 0) erase();
-                    else setNumber(number, false, prev);
-                } else if (event.key.indexOf('Arrow') !== -1) {
-                    switch (event.key) {
-                        case "ArrowUp":
-                            return {x: prev.x, y: prev.y - 1 < 0 ? sudoku.puzzle.length - 1 : prev.y - 1};
-                        case "ArrowDown":
-                            return {x: prev.x, y: (prev.y + 1) % sudoku.puzzle.length};
-                        case "ArrowLeft":
-                            return {y: prev.y, x: prev.x - 1 < 0 ? sudoku.puzzle.length - 1 : prev.x - 1};
-                        case "ArrowRight":
-                            return {y: prev.y, x: (prev.x + 1) % sudoku.puzzle.length};
-                    }
+            event.preventDefault();
+            const number = parseInt(event.key);
+            if (!isNaN(number)) {
+                const location = selected.current;
+                if (location) {
+                    if (number === 0) erase(location);
+                    else setNumber(number, location);
                 }
-                return prev;
-            });
+            }
         }
 
-        document.addEventListener('keydown', keyboardEventListener);
-        return () => document.removeEventListener('keydown', keyboardEventListener);
-    }, []);
-
-
-    function setNumber(number: number, isHint?: boolean, coords?: ICoords) {
-        actionWrapper(() => {
-            coords ||= selected;
-            if (!coords) return;
-            const cell = sudoku.puzzle[coords.y][coords.x];
-            if (cell.isFixed) return;
-            if (noteMode && !isHint) {
-                if (cell.notes.has(number)) cell.notes.delete(number);
-                else cell.notes.add(number);
-            } else {
-                cell.value = number;
-                //Remove notes from dependent cells
-                visitDeps(coords.x, coords.y, ((tx, ty) => {
-                    sudoku.puzzle[ty][tx].notes.delete(number);
-                }));
-                if (isHint) cell.isFixed = true;
-                triggerCheck();
+        function movementEventListener(event: KeyboardEvent) {
+            function getNewLocation(location: ICoords): ICoords | undefined {
+                const {x, y} = location;
+                switch (event.key) {
+                    case "ArrowUp":
+                        return {x, y: y - 1 < 0 ? sudoku.puzzle.length - 1 : y - 1};
+                    case "ArrowDown":
+                        return {x, y: (y + 1) % sudoku.puzzle.length};
+                    case "ArrowLeft":
+                        return {y, x: x - 1 < 0 ? sudoku.puzzle.length - 1 : x - 1};
+                    case "ArrowRight":
+                        return {y, x: (x + 1) % sudoku.puzzle.length};
+                }
             }
-        }, true);
-    }
 
-    function erase(coords?: ICoords) {
-        actionWrapper(() => {
-            coords ||= selected;
-            if (!coords) return;
-            const cell = sudoku.puzzle[coords.y][coords.x];
-            if (cell.isFixed) return;
-            cell.value = 0;
-            cell.notes.clear();
-        }, true);
-    }
-
-    function check() {
-
-    }
-
-    function actionWrapper(callback: () => unknown, needsRender?: boolean) {
-        if (isComplete) return;
-        callback();
-        if (needsRender) triggerRender();
-    }
-
-    function giveHint() {
-        actionWrapper(() => {
-            setStartTime(prev => prev - HINT_PENALTY);
-            const freeCells = getFreeCells(sudoku.puzzle);
-            // for (const c of freeCells) {
-            //     setNumber(sudoku.solution[c.y][c.x], c);
-            //     sudoku.puzzle[c.y][c.x].isFixed = true;
-            // }
-            if (freeCells.length) {
-                const ind = Math.floor(Math.random() * freeCells.length);
-                const coords = freeCells[ind];
-                setSelected(coords);
-                setNumber(sudoku.solution[coords.y][coords.x], true, coords);
+            if (event.key.indexOf('Arrow') !== -1) {
+                if (selected.current) {
+                    selected.current = getNewLocation(selected.current);
+                    triggerRender();
+                }
             }
+        }
+
+        document.addEventListener('keyup', keyboardEventListener);
+        document.addEventListener('keydown', movementEventListener);
+        return () => {
+            document.removeEventListener('keyup', keyboardEventListener);
+            document.removeEventListener('keydown', movementEventListener);
+        }
+    }, [erase, setNumber]);
+
+    function recordNumberCount(number: number, op = 1) {
+        //Wrapper to keep track of the number of digits in the sudoku
+        setNumberCount(prev => {
+            const newCount = {...prev};
+            newCount[number] += op;
+            return newCount;
         });
-    }
-
-    function getHighlight(x: number, y: number): CELL_HIGHLIGHT {
-        if (!selected) return CELL_HIGHLIGHT.None;
-        const sx = selected.x, sy = selected.y;
-        //Is in row or column (or both)
-        let high = (x === sx ? 1 : 0) + (y === sy ? 1 : 0);
-        if (high) return high;
-        //Same number
-        const currValue = sudoku.puzzle[y][x].value;
-        if (currValue && sudoku.puzzle[sy][sx].value === currValue) return CELL_HIGHLIGHT.Soft
-        //If in same block
-        const bx = Math.floor(x / root), by = Math.floor(y / root);
-        const bsx = Math.floor(sx / root), bsy = Math.floor(sy / root);
-        if (bx === bsx && by === bsy) return CELL_HIGHLIGHT.Soft;
-        return CELL_HIGHLIGHT.None;
     }
 
     return (
         <div className={"sudoku --vertical"}>
             <header className={"sudoku-header"}>
                 <ActionButton icon={<Cancel/>} onClick={() => onExit()}/>
-                <h3>{timer}</h3>
+                <p>{timer}</p>
                 <h3>{DIFFICULTY[sudoku.difficulty]}</h3>
             </header>
             <section className={"sudoku-board"}>{board}</section>
             <section className={"sudoku-actions --spacing"}>
                 <div className={"button-group --vertical"}>
-                    <ActionButton icon={<EditPencil/>} onClick={() => setNoteMode(prev => !prev)} isToggled={noteMode}/>
-                    <ActionButton icon={<WifiRounded/>} onClick={() => erase()}/>
+                    <ActionButton
+                        icon={<EditPencil/>}
+                        onClick={() => noteMode.current = !noteMode.current}
+                        isToggled={noteMode.current}
+                    />
+                    <ActionButton icon={<Undo/>} onClick={() => erase(selected.current)}/>
                 </div>
-                <SudokuGrid size={root}
-                            isSmall={true}
-                            contents={Array.from({length: sudoku.solution.length})
-                                .map((x, i) => <ActionButton icon={i + 1} onClick={() => setNumber(i + 1)} fill/>)}/>
+                {controls}
                 <div className={"button-group --vertical"}>
                     <ActionButton icon={<Check/>} onClick={check}/>
                     <ActionButton icon={<QuestionMark/>} onClick={giveHint}/>
@@ -225,11 +290,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
             <div className={`popup sudoku-complete --spacing --vertical ${isComplete ? 'toggled' : ''}`}>
                 <p>{`Completed in ${timer}`}</p>
                 <div className={"button-group --spacing"}>
-                    <button className={"button-cta --quiet"} onClick={() => onExit()}>{"Menu"}</button>
-                    <button className={"button-cta"} onClick={() => {
-                        onExit(true);
-                        triggerReset();
-                    }}>{"Play again"}</button>
+                    <button className={"button-cta"} onClick={() => onExit()}>{"Menu"}</button>
                 </div>
             </div>
         </div>

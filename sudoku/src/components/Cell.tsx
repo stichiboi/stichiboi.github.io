@@ -15,9 +15,11 @@ export default function Cell({
         return components;
     }, []);
 
+    const highlightClass = highlight ? CELL_HIGHLIGHT[highlight].toLowerCase() : '';
+
     return (
         <button
-            className={`button-action fill ${highlight ? 'highlight-' + CELL_HIGHLIGHT[highlight].toLowerCase() : ''} ${cell.isFixed ? '--fixed' : ''}`}
+            className={`button-action fill ${highlightClass ? 'highlight-' + highlightClass : ''} ${cell.isFixed ? '--fixed' : ''}`}
             onClick={onClick}>
             {cell.value || <div className={"cell-notes"}>{formatNotes(cell.notes)}</div>}
         </button>
