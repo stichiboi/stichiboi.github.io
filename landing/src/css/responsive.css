@@ -27,6 +27,14 @@
         order: 1;
     }
 
+    .content:nth-child(odd) > .content-image {
+        order: 1;
+    }
+
+    .content:nth-child(odd) > .content-text {
+        order: 2;
+    }
+
 
     #github-source {
         flex-direction: row;
