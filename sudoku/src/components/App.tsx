@@ -53,10 +53,12 @@ function App() {
                     <button className={"button-cta"} onClick={buildSudoku}>
                         {"New Game"}
                     </button>
-                    <Toggle isToggled={isDarkMode} onToggle={() => setDarkMode(prev => !prev)}
-                            leftIcon={<SunLight/>}
-                            rightIcon={<HalfMoon/>}
-                            className={"toggle-dark-mode"}
+                    <Toggle
+                        saveKey={"stichi-sudoku-dark-mode"}
+                        onToggle={setDarkMode}
+                        leftIcon={<SunLight/>}
+                        rightIcon={<HalfMoon/>}
+                        className={"toggle-dark-mode"}
                     />
                 </div>
             }
