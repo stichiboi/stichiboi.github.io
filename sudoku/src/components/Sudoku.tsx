@@ -30,6 +30,12 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
     const [_triggerRender, _setTriggerRender] = useState(0);
     const triggerRender = useCallback(() => _setTriggerRender(prev => ++prev), []);
 
+    const [_triggerNoteMode, _setTriggerNoteMode] = useState(0);
+    const toggleNoteMode = useCallback(() => {
+        noteMode.current = !noteMode.current;
+        _setTriggerNoteMode(prev => ++prev);
+    }, []);
+
     const actionWrapper = useCallback((callback: () => unknown, needsRender?: boolean) => {
         if (isComplete) return;
         callback();
@@ -153,17 +159,26 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
             <SudokuGrid size={root}
                         isSmall={true}
                         contents={Array.from({length: sudoku.solution.length})
-                            .map((x, i) => (
-                                <button className={"button-action fill"}
-                                        onClick={() => setNumber(i + 1, selected.current)}>
-                                    <p>{i + 1}</p>
-                                    <div className={"cell-notes sudoku-missing-count"}>
-                                        {sudoku.puzzle.length - numberCount[i + 1] || 0}
-                                    </div>
-                                </button>
-                            ))}/>
+                            .map((x, i) => {
+                                const missCount = sudoku.puzzle.length - numberCount[i + 1];
+                                return (
+                                    <button className={"button-action fill"}
+                                            onClick={() => setNumber(i + 1, selected.current)}>
+                                        <p>{i + 1}</p>
+                                        <div className={"cell-notes sudoku-missing-count"}>
+                                            {(isNaN(missCount) || missCount === 0) ? '' : missCount}
+                                        </div>
+                                    </button>
+                                )
+                            })}/>
         )
-    }, [sudoku, numberCount])
+    }, [sudoku, numberCount]);
+
+    const noteModeButton = useMemo(() => {
+        return (
+            <ActionButton icon={<EditPencil/>} onClick={toggleNoteMode} isToggled={noteMode.current}/>
+        )
+    }, [_triggerNoteMode]);
 
     useEffect(() => {
         setStartTime(Date.now() - sudoku.time);
@@ -214,12 +229,13 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
     useEffect(() => {
         function keyboardEventListener(event: KeyboardEvent) {
             event.preventDefault();
-            const number = parseInt(event.key);
-            if (!isNaN(number)) {
-                const location = selected.current;
-                if (location) {
-                    if (number === 0) erase(location);
-                    else setNumber(number, location);
+            const location = selected.current;
+            if (location) {
+                const number = parseInt(event.key);
+                if (number) {
+                    setNumber(number, location);
+                } else if (number === 0 || event.key === 'Backspace' || event.key === 'Clear' || event.key === 'Delete') {
+                    erase(location);
                 }
             }
         }
@@ -239,12 +255,15 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                 }
             }
 
-            if (event.key.indexOf('Arrow') !== -1) {
-                if (selected.current) {
-                    selected.current = getNewLocation(selected.current);
-                    triggerRender();
-                }
+            if (event.key.indexOf('Arrow') !== -1 && selected.current) {
+                selected.current = getNewLocation(selected.current);
+                triggerRender();
             }
+            if (event.key === 'n' || event.key === 'Enter' || event.key === 'Return') {
+                event.preventDefault();
+                toggleNoteMode();
+            }
+
         }
 
         document.addEventListener('keyup', keyboardEventListener);
@@ -274,11 +293,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
             <section className={"sudoku-board"}>{board}</section>
             <section className={"sudoku-actions --spacing"}>
                 <div className={"button-group --vertical"}>
-                    <ActionButton
-                        icon={<EditPencil/>}
-                        onClick={() => noteMode.current = !noteMode.current}
-                        isToggled={noteMode.current}
-                    />
+                    {noteModeButton}
                     <ActionButton icon={<Undo/>} onClick={() => erase(selected.current)}/>
                 </div>
                 {controls}

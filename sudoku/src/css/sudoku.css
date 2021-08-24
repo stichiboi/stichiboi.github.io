@@ -33,6 +33,12 @@
     justify-content: space-around;
 }
 
+.sudoku-actions > .button-group > .button-action {
+    --button-size: 42px;
+    width: var(--button-size);
+    height: var(--button-size);
+}
+
 .sudoku-grid {
     --divisor: 1;
     position: relative;
