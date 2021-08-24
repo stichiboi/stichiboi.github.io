@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
+const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 
 const ASSET_PATH = process.env.ASSET_PATH || '';
 
@@ -79,6 +80,9 @@ module.exports = {
             inlineSource: '.(js)$',
             chunks: ['index', 'visuals']
         }),
-        // new CleanWebpackPlugin(),
+        new FaviconsWebpackPlugin({
+            logo: path.resolve(__dirname, '../src/icons/favicon.svg'),
+            prefix: 'favicons/'
+        })
     ]
 };

@@ -12,7 +12,10 @@
     "webpack",
     "extension"
   ],
-  "author": "DANM",
+  "author": {
+    "name": "Daniele Mazzotta",
+    "url": "https://github.com/stichiboi"
+  },
   "license": "ISC",
   "browserslist": [
     "> 1%",
@@ -22,9 +25,11 @@
     "autoprefixer": "^10.2.6",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.0",
+    "favicons": "^6.2.2",
+    "favicons-webpack-plugin": "^5.0.2",
     "file-loader": "^6.2.0",
     "html-loader": "^1.3.2",
-    "html-webpack-plugin": "^4.5.0",
+    "html-webpack-plugin": "^5.0.0",
     "postcss": "^8.2.5",
     "postcss-loader": "^6.1.1",
     "postcss-preset-env": "^6.7.0",

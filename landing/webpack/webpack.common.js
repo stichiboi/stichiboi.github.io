@@ -2,8 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const ASSET_PATH = process.env.ASSET_PATH || '';
-
 module.exports = {
     entry: {
         index: path.resolve(__dirname, './../src/index.js'),
@@ -68,10 +68,13 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'Main UI',
             filename: 'index.html',
-            favicon: path.resolve(__dirname, './../src/assets/images/favicon.png'),
             template: path.resolve(__dirname, './../src/index.html'),
             inlineSource: '.(js)$',
             chunks: ['index']
+        }),
+        new FaviconsWebpackPlugin({
+            logo: path.resolve(__dirname, '../src/assets/favicon.svg'),
+            prefix: 'assets/favicons/'
         })
     ]
 };
