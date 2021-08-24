@@ -42,9 +42,9 @@
 .sudoku-grid {
     --divisor: 1;
     position: relative;
-    max-width: calc(min(100vw, 60vh) / var(--divisor));
-    aspect-ratio: 1;
-    flex: 1 1 auto;
+    --grid-size: calc((min(86vw, 60vh) + (3 - var(--divisor)) * 12px) / var(--divisor));
+    width: var(--grid-size);
+    height: var(--grid-size);
 }
 
 .sudoku-grid.small,
