@@ -7,14 +7,6 @@ import {DIFFICULTY, ISudoku} from "../types/types";
 import {generateSudoku} from "../sudokuGenerator";
 import Sudoku from "./Sudoku";
 
-export const SettingsContext = React.createContext({
-    difficulty: DIFFICULTY.Easy,
-    setDifficulty: (value: DIFFICULTY) => {
-    },
-    isDarkMode: false,
-    setDarkMode: (value: boolean) => {
-    }
-});
 ReactDOM.render(<App/>, document.getElementById('root'));
 
 function App() {
