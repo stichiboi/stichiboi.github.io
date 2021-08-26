@@ -8,11 +8,11 @@ export default function Cell({
                              }: { cell: ICell, onClick: () => unknown, highlight?: CELL_HIGHLIGHT }) {
 
     const formatNotes = useCallback((notes: Set<number>) => {
-        const components = [] as JSX.Element[];
-        notes.forEach(n => components.push((
-            <p key={n}>{n}</p>
-        )));
-        return components;
+        return [...notes]
+            .sort((a, b) => a < b ? -1 : 1)
+            .map(n => (
+                <p key={n}>{n}</p>
+            ));
     }, []);
 
     const highlightClass = highlight ? CELL_HIGHLIGHT[highlight].toLowerCase() : '';
