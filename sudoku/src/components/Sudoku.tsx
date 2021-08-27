@@ -357,7 +357,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                 {controls}
                 <div className={"button-group --vertical"}>
                     <ActionButton icon={<Check/>} onClick={check}/>
-                    <ActionButton icon={<QuestionMark/>} onClick={giveHint}/>
+                    <ActionButton icon={<QuestionMark/>} onClick={() => giveHint(false)}/>
                 </div>
             </section>
             <div onMouseEnter={throwConfetti}
