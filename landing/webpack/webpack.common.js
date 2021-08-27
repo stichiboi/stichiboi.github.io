@@ -13,7 +13,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         publicPath: ASSET_PATH,
-        path: path.resolve(__dirname, '../..'),
+        path: path.resolve(__dirname, '../../dist'),
     },
     resolve: {extensions: ['.tsx', '.ts', '.jsx', '.js']},
 
@@ -73,6 +73,8 @@ module.exports = {
             inlineSource: '.(js)$',
             chunks: ['index'],
             meta: {
+                "og:url": {property: "og:url", content: "https://stichiboi.com"},
+                "og:type": {property: "og:type", content: "website"},
                 "og:title": {property: "og:title", content: "Stichiboi, creative developer"},
                 "og:description": {
                     property: "og:description",

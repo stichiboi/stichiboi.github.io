@@ -12,7 +12,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         publicPath: ASSET_PATH,
-        path: path.resolve(__dirname, '..'),
+        path: path.resolve(__dirname, '../../dist/overload'),
     },
     resolve: {extensions: ['.tsx', '.ts', '.jsx', '.js']},
 

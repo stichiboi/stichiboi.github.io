@@ -1,0 +1,65 @@
+{
+    "name": "space_invaders",
+    "version": "1.0.0",
+    "description": "Space Invaders web game",
+    "main": "src/index.js",
+    "scripts": {
+        "build": "webpack --config webpack/webpack.dev.js",
+        "watch": "webpack --config webpack/webpack.dev.js --watch",
+        "production": "webpack --config webpack/webpack.prod.js"
+    },
+    "keywords": [
+        "webpack",
+        "extension",
+        "cep"
+    ],
+    "author": {
+        "name": "Daniele Mazzotta",
+        "url": "https://github.com/stichiboi"
+    },
+    "license": "ISC",
+    "browserslist": [
+        "> 1%",
+        "last 5 versions"
+    ],
+    "devDependencies": {
+        "@babel/core": "^7.14.0",
+        "@babel/preset-env": "^7.14.0",
+        "@babel/preset-react": "^7.14.5",
+        "@babel/preset-typescript": "^7.15.0",
+        "@types/react": "^17.0.13",
+        "@types/react-dom": "^17.0.8",
+        "babel-loader": "^8.2.2",
+        "clean-webpack-plugin": "^3.0.0",
+        "css-loader": "^5.0.0",
+        "favicons": "^6.2.2",
+        "favicons-webpack-plugin": "^5.0.2",
+        "file-loader": "^6.2.0",
+        "html-loader": "^1.3.2",
+        "html-webpack-plugin": "^5.0.0",
+        "postcss-loader": "^6.1.1",
+        "postcss-preset-env": "^6.7.0",
+        "style-loader": "^2.0.0",
+        "ts-loader": "^8.0.11",
+        "typescript": "^4.1.3",
+        "url-loader": "^4.1.1",
+        "webpack": "^5.51.1",
+        "webpack-cli": "^4.1.0",
+        "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {
+        "@svgr/webpack": "^5.5.0",
+        "@types/jquery": "^3.5.4",
+        "iconoir-react": "^2.0.0",
+        "jquery": "^3.6.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    },
+    "babel": {
+        "presets": [
+            "@babel/preset-env",
+            "@babel/preset-react",
+            "@babel/preset-typescript"
+        ]
+    }
+}

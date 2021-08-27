@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const postcssPresetEnv = require('postcss-preset-env');
+const FaviconsWebpackPlugin = require("favicons-webpack-plugin");
 
 const ASSET_PATH = process.env.ASSET_PATH || '';
 
@@ -12,7 +14,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         publicPath: ASSET_PATH,
-        path: path.resolve(__dirname, '../../dist/reflexo'),
+        path: path.resolve(__dirname, '../../dist/spaceInvaders'),
     },
     resolve: {extensions: ['.tsx', '.ts', '.jsx', '.js']},
 
@@ -22,7 +24,20 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     'style-loader',
-                    'css-loader',
+                    {
+                        loader: "css-loader",
+                        options: {importLoaders: 1},
+                    },
+                    {
+                        loader: "postcss-loader",
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    postcssPresetEnv
+                                ],
+                            },
+                        }
+                    }
                 ],
             },
             {
@@ -48,7 +63,7 @@ module.exports = {
             },
             {
                 test: /\.(ts|tsx)$/,
-                use: ['ts-loader']
+                use: ['babel-loader']
             },
         ]
     },
@@ -65,6 +80,9 @@ module.exports = {
             inlineSource: '.(js)$',
             chunks: ['index', 'visuals']
         }),
-        // new CleanWebpackPlugin(),
+        new FaviconsWebpackPlugin({
+            logo: path.resolve(__dirname, '../src/icons/favicon.svg'),
+            prefix: 'favicons/'
+        })
     ]
 };

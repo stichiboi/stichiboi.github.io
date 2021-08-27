@@ -1,8 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-//TODO Implement CleanWebpack plugin
 
 const ASSET_PATH = process.env.ASSET_PATH || '';
 
@@ -15,7 +13,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         publicPath: ASSET_PATH,
-        path: path.resolve(__dirname, '..'),
+        path: path.resolve(__dirname, '../../dist/stichiclock'),
     },
     resolve: {extensions: ['.tsx', '.ts', '.jsx', '.js']},
 
