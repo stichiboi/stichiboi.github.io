@@ -15,6 +15,24 @@
     align-items: center;
 }
 
+.sudoku-header > * {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.sudoku-header > *:first-child > * {
+    margin-right: auto;
+}
+
+.sudoku-header > *:last-child > * {
+    margin-left: auto;
+}
+
+.sudoku-difficulty {
+    justify-content: flex-end;
+}
+
 .sudoku-header > *:not(:first-child) {
     margin-left: auto;
 }

@@ -5,6 +5,7 @@ import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
 import {checkValidity, getFreeCells, loop, visitDeps} from "../sudokuGenerator";
+import confetti from 'canvas-confetti';
 
 const HINT_PENALTY = 30000; //30 sec
 const CHECK_PENALTY = 30000; //30 sec
@@ -23,6 +24,9 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
     const [isComplete, setIsComplete] = useState(false);
     const [timerId, setTimerId] = useState(0);
     const [numberCount, setNumberCount] = useState({} as { [key: number]: number });
+
+    const [_triggerConfetti, _setTriggerConfetti] = useState(0);
+    const throwConfetti = useCallback(() => _setTriggerConfetti(prev => ++prev), []);
 
     const [_triggerCheck, _setTriggerCheck] = useState(0);
     const triggerCheck = useCallback(() => _setTriggerCheck(prev => ++prev), []);
@@ -91,15 +95,16 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }, true);
     }, [sudoku]);
 
-    const giveHint = useCallback(() => {
+    const giveHint = useCallback((giveAll?: boolean) => {
         actionWrapper(() => {
             setStartTime(prev => prev - HINT_PENALTY);
             const freeCells = getFreeCells(sudoku.puzzle);
-            // for (const c of freeCells) {
-            //     setNumber(sudoku.solution[c.y][c.x], c);
-            //     sudoku.puzzle[c.y][c.x].isFixed = true;
-            // }
-            if (freeCells.length) {
+            if (giveAll) {
+                for (const c of freeCells) {
+                    setNumber(sudoku.solution[c.y][c.x], c);
+                    sudoku.puzzle[c.y][c.x].isFixed = true;
+                }
+            } else if (freeCells.length) {
                 const ind = Math.floor(Math.random() * freeCells.length);
                 const coords = freeCells[ind];
                 selected.current = coords;
@@ -274,6 +279,59 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         }
     }, [erase, setNumber]);
 
+    //Confetti
+    useEffect(() => {
+        if (isComplete) {
+            throwConfetti();
+        }
+    }, [isComplete]);
+
+    useEffect(() => {
+        function fire(particleRatio: number, opts?: confetti.Options) {
+            const count = 200;
+            const defaults = {
+                origin: {y: 1}
+            };
+            return confetti(Object.assign({}, defaults, opts, {
+                particleCount: Math.floor(count * particleRatio)
+            }));
+        }
+
+        function bigConfetti() {
+            fire(0.25, {
+                spread: 26,
+                startVelocity: 55,
+            });
+            fire(0.2, {
+                spread: 60,
+            });
+            fire(0.35, {
+                spread: 100,
+                decay: 0.91,
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 25,
+                decay: 0.92,
+            });
+            fire(0.1, {
+                spread: 120,
+                startVelocity: 45,
+            });
+        }
+
+        function smallConfetti() {
+            fire(0.5, {
+                particleCount: 100,
+                spread: 70
+            });
+        }
+
+        if (_triggerConfetti) {
+            Math.random() > 0.5 ? smallConfetti() : bigConfetti();
+        }
+    }, [_triggerConfetti]);
+
     function recordNumberCount(number: number, op = 1) {
         //Wrapper to keep track of the number of digits in the sudoku
         setNumberCount(prev => {
@@ -288,7 +346,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
             <header className={"sudoku-header"}>
                 <ActionButton icon={<Cancel/>} onClick={() => onExit()}/>
                 <p>{timer}</p>
-                <h3>{DIFFICULTY[sudoku.difficulty]}</h3>
+                <h3 className={"sudoku-difficulty"}>{DIFFICULTY[sudoku.difficulty]}</h3>
             </header>
             <section className={"sudoku-board"}>{board}</section>
             <section className={"sudoku-actions --spacing"}>
@@ -302,8 +360,9 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                     <ActionButton icon={<QuestionMark/>} onClick={giveHint}/>
                 </div>
             </section>
-            <div className={`popup sudoku-complete --spacing --vertical ${isComplete ? 'toggled' : ''}`}>
-                <p>{`Completed in ${timer}`}</p>
+            <div onMouseEnter={throwConfetti}
+                 className={`popup sudoku-complete --spacing --vertical ${isComplete ? 'toggled' : ''}`}>
+                <button onClick={throwConfetti}>{`Completed in ${timer} 🎉`}</button>
                 <div className={"button-group --spacing"}>
                     <button className={"button-cta"} onClick={() => onExit()}>{"Menu"}</button>
                 </div>
