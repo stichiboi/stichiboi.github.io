@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const ASSET_PATH = process.env.ASSET_PATH || '';
+
 module.exports = {
     entry: {
         index: path.resolve(__dirname, './../src/index.js'),
@@ -70,7 +71,18 @@ module.exports = {
             filename: 'index.html',
             template: path.resolve(__dirname, './../src/index.html'),
             inlineSource: '.(js)$',
-            chunks: ['index']
+            chunks: ['index'],
+            meta: {
+                "og:title": {property: "og:title", content: "Stichiboi, creative developer"},
+                "og:description": {
+                    property: "og:description",
+                    content: "A boi from Italy who likes building stuff"
+                },
+                "og:image": {
+                    property: "og:image",
+                    content: "https://raw.githubusercontent.com/stichiboi/stichiboi.github.io/main/landing/src/assets/images/social_media_preview.png"
+                },
+            }
         }),
         new FaviconsWebpackPlugin({
             logo: path.resolve(__dirname, '../src/assets/favicon.svg'),
