@@ -1,0 +1,56 @@
+.app-container {
+    --battlefield-width: 300px;
+    --battlefield-height: 600px;
+    width: var(--battlefield-width);
+    margin: 0 auto;
+    border: 1px solid rebeccapurple;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+}
+
+.app-header > * {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.app-header > *:first-child > * {
+    margin-right: auto;
+}
+
+.app-header > *:last-child > * {
+    margin-left: auto;
+}
+
+.battlefield {
+    min-height: var(--battlefield-height);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid yellow;
+}
+
+.player-area {
+    display: flex;
+}
+
+.game-component {
+    width: fit-content;
+    height: fit-content;
+    --position-x: 0px;
+    --position-y: 0px;
+    transition: transform 0.1s linear;
+
+    transform: translate(var(--position-x), var(--position-y));
+}
+
+.game-component > svg {
+    width: auto;
+    height: auto;
+}
+
+.projectile {
+    position: absolute;
+}
