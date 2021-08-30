@@ -1,43 +1,44 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {IProjectileProps} from "../types/types";
 import ProjectileIcon from '../icons/projectile.svg';
-
-const PROJECTILE_SPEED = -15 / 30;
-const PROJECTILE_HEIGHT = 14;
-const PROJECTILE_WIDTH = 6;
+import {PROJ_SIZE, PROJ_SPEED} from "../settings";
 
 export default function Projectile({
                                        id,
                                        setGameLoopFunction,
-                                       xCoordinate,
                                        onMove,
                                        onOutOfBounds,
-                                       battlefieldHeight
+                                       battlefieldHeight,
+                                       isInvaderProjectile,
+                                       startCoords
                                    }: IProjectileProps) {
 
-    const [position, setPosition] = useState(battlefieldHeight - PROJECTILE_HEIGHT / 2);
+    const [position, setPosition] = useState(startCoords.y);
     const positionStyle = useMemo(() => ({
-            "--position-x": `${xCoordinate - PROJECTILE_WIDTH / 2}px`,
+            "--position-x": `${startCoords.x - PROJ_SIZE.w / 2}px`,
             "--position-y": `${position}px`
         } as React.CSSProperties),
         [position]);
     useEffect(() => {
         setGameLoopFunction(id, (dt) => {
-            const dPos = PROJECTILE_SPEED * dt;
+            const dPos = PROJ_SPEED * dt * (isInvaderProjectile ? -1 : 1);
             setPosition(prev => prev + dPos);
         });
     }, []);
 
     useEffect(() => {
-        if (position < -PROJECTILE_HEIGHT * 3) {
-            onOutOfBounds(id);
+        if (position < battlefieldHeight + PROJ_SIZE.h * 2 && position > -PROJ_SIZE.h * 4) {
+            onMove({x: startCoords.x - PROJ_SIZE.w / 2, y: position});
         } else {
-            onMove({x: xCoordinate - PROJECTILE_WIDTH / 2, y: position});
+            if (isInvaderProjectile)
+                console.log('out of bounds', position);
+            onOutOfBounds(id);
         }
     }, [position]);
 
     return (
-        <div className={"game-component projectile"} style={positionStyle}>
+        <div className={`game-component projectile ${isInvaderProjectile ? 'invader-projectile' : ''}`}
+             style={positionStyle}>
             <ProjectileIcon/>
         </div>
     )

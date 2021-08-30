@@ -51,6 +51,11 @@
     height: auto;
 }
 
+.invader,
 .projectile {
     position: absolute;
+}
+
+.projectile.invader-projectile {
+    color: var(--color-error);
 }

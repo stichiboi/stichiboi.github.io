@@ -3,13 +3,10 @@ import React, {CSSProperties, useCallback, useEffect, useMemo, useRef, useState}
 import Player from "./Player";
 import ActionButton from "./ActionButton";
 import {Cancel, PauseOutline} from "iconoir-react";
-import {GameLoopFunc, ICoords} from "../types/types";
+import {Dict, GameLoopFunc, ICoords} from "../types/types";
 import Projectile from "./Projectile";
-
-const BF_SIZE = {
-    h: 300,
-    w: 300
-}
+import {BF_SIZE, INVADER_COLUMNS, INVADER_ROWS} from "../settings";
+import Invader from "./Invader";
 
 ReactDOM.render(<App/>, document.getElementById('root'));
 
@@ -18,29 +15,41 @@ function App() {
         "--battlefield-width": `${BF_SIZE.w}px`,
         "--battlefield-height": `${BF_SIZE.h}px`
     } as CSSProperties), []);
-    const gameLoopFunctions = useRef({} as { [key: string]: GameLoopFunc });
+    const gameLoopFunctions = useRef({} as Dict<GameLoopFunc>);
     const prevFrameTime = useRef(Date.now());
     const isPaused = useRef(false);
     const setGameLoopFunction = useCallback((id: string, func: GameLoopFunc) => {
         gameLoopFunctions.current[id] = func;
     }, []);
 
-    const [projectiles, setProjectiles] = useState({} as { [key: string]: JSX.Element });
+    const [projectiles, setProjectiles] = useState({} as Dict<JSX.Element>);
+    const [invadersProjectiles, setInvadersProjectiles] = useState({} as Dict<JSX.Element>);
+    const [invaders, setInvaders] = useState({} as Dict<JSX.Element>);
+    const [invadersPositions, setInvadersPosition] = useState({} as Dict<ICoords>);
+    const setInvaderPosition = useCallback((id: string, coords: ICoords) => {
+        setInvadersPosition(prev => {
+            const newPosition = {...prev};
+            newPosition[id] = coords;
+            return newPosition;
+        });
+    }, [setInvadersPosition]);
     const [playerPosition, setPlayerPosition] = useState({x: 0, y: 0} as ICoords);
 
-    const onShoot = useCallback((coords: ICoords) => {
-        const id = 'projectile-' + Math.random().toString().slice(2);
-        setProjectiles(prev => ({
+    const onShoot = useCallback((coords: ICoords, isInvader?: boolean) => {
+        const id = `proj-${Math.random().toString().slice(2)}-${isInvader ? 'i' : 'p'}`;
+        const setFunction = isInvader ? setInvadersProjectiles : setProjectiles;
+        console.log('Setting projectile', id);
+        setFunction(prev => ({
             ...prev,
             [id]: <Projectile
-                key={id}
-                id={id}
+                key={id} id={id}
+                isInvaderProjectile={!!isInvader}
+                startCoords={coords}
                 battlefieldHeight={BF_SIZE.h}
-                xCoordinate={coords.x}
                 setGameLoopFunction={setGameLoopFunction}
                 onOutOfBounds={id => {
                     delete gameLoopFunctions.current[id];
-                    setProjectiles(prev => {
+                    setFunction(prev => {
                         const newProj = {...prev};
                         delete newProj[id];
                         return newProj;
@@ -49,7 +58,24 @@ function App() {
                 onMove={() => {
                 }}/>
         }));
-    }, [playerPosition]);
+    }, [setInvadersProjectiles, setProjectiles]);
+
+    //Set invaders
+    useEffect(() => {
+        const invaders = {} as { [key: string]: JSX.Element };
+        for (let r = 0; r < INVADER_ROWS; r++) {
+            for (let c = 0; c < INVADER_COLUMNS; c++) {
+                const id = `invader-${r}-${c}`;
+                invaders[id] =
+                    <Invader
+                        key={id} id={id} column={c} row={r}
+                        onShoot={coords => onShoot(coords, true)}
+                        onMove={coords => setInvaderPosition(id, coords)}
+                        setGameLoopFunction={setGameLoopFunction}/>
+            }
+        }
+        setInvaders(invaders);
+    }, []);
 
     //Game loop
     useEffect(() => {
@@ -74,14 +100,15 @@ function App() {
                 />
             </header>
             <section className={"battlefield"}>
+                {Object.values(invaders)}
+                {Object.values(invadersProjectiles)}
                 {Object.values(projectiles)}
             </section>
             <section className={"player-area"}>
                 <Player
-                    battlefieldWidth={BF_SIZE.w}
                     setGameLoopFunction={setGameLoopFunction}
                     onMove={coords => setPlayerPosition(coords)}
-                    onShoot={onShoot}
+                    onShoot={coords => onShoot(coords, false)}
                 />
             </section>
         </main>
