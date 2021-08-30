@@ -9,7 +9,7 @@ export const SHIP_SPEED = 8 / 30;
 export const SHIP_RELOAD = 500;
 
 export const INVADER_SPEED = 1 / 30;
-export const INVADER_RELOAD = 10000;
+export const INVADER_RELOAD = 6000;
 export const INVADER_SPACING = {w: 10, h: 10};
 export const INVADER_ROWS = 4;
 export const INVADER_COLUMNS = 5;

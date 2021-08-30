@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {IProjectileProps} from "../types/types";
 import ProjectileIcon from '../icons/projectile.svg';
-import {PROJ_SIZE, PROJ_SPEED} from "../settings";
+import {PROJ_SIZE, PROJ_SPEED, SHIP_SIZE} from "../settings";
 
 export default function Projectile({
                                        id,
@@ -27,11 +27,9 @@ export default function Projectile({
     }, []);
 
     useEffect(() => {
-        if (position < battlefieldHeight + PROJ_SIZE.h * 2 && position > -PROJ_SIZE.h * 4) {
+        if (position < battlefieldHeight + SHIP_SIZE.h * 2 && position > -PROJ_SIZE.h * 4) {
             onMove({x: startCoords.x - PROJ_SIZE.w / 2, y: position});
         } else {
-            if (isInvaderProjectile)
-                console.log('out of bounds', position);
             onOutOfBounds(id);
         }
     }, [position]);
