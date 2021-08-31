@@ -364,7 +364,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                  className={`popup sudoku-complete --spacing --vertical ${isComplete ? 'toggled' : ''}`}>
                 <button onClick={throwConfetti}>{`Completed in ${timer} 🎉`}</button>
                 <div className={"button-group --spacing"}>
-                    <button className={"button-cta"} onClick={() => onExit()}>{"Menu"}</button>
+                    <button className={"button-cta --quiet"} onClick={() => onExit()}>{"Menu"}</button>
                 </div>
             </div>
         </div>
