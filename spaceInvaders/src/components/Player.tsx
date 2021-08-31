@@ -21,7 +21,7 @@ export default function Player({
 
     const shoot = useCallback(() => {
         if (canShoot.current) {
-            onShoot({x: position.current + SHIP_SIZE.w / 2, y: BF_SIZE.h});
+            onShoot({x: position.current + SHIP_SIZE.w / 2, y: BF_SIZE.h - SHIP_SIZE.h});
             canShoot.current = false;
             reloadTimer.current = 0;
         }
@@ -38,7 +38,7 @@ export default function Player({
             } else {
                 position.current = moveDirection.current === MOVE_DIR.LEFT ? 0 : bounds;
             }
-            onMove({x: position.current, y: BF_SIZE.h});
+            onMove({x: position.current, y: BF_SIZE.h - SHIP_SIZE.h});
             setPositionStyle(position.current);
         }
 

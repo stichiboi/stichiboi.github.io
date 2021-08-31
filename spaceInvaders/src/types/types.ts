@@ -34,3 +34,11 @@ export interface ICoords {
     x: number,
     y: number
 }
+
+export interface ISize {
+    w: number,
+    h: number
+}
+
+export interface IRect extends ICoords, ISize {
+}

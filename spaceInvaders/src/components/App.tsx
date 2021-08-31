@@ -1,11 +1,11 @@
 import ReactDOM from "react-dom";
-import React, {CSSProperties, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {CSSProperties, Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import Player from "./Player";
 import ActionButton from "./ActionButton";
 import {Cancel, PauseOutline} from "iconoir-react";
-import {Dict, GameLoopFunc, ICoords} from "../types/types";
+import {Dict, GameLoopFunc, ICoords, IRect, ISize} from "../types/types";
 import Projectile from "./Projectile";
-import {BF_SIZE, INVADER_COLUMNS, INVADER_ROWS} from "../settings";
+import {BF_SIZE, INVADER_COLUMNS, INVADER_ROWS, INVADER_SIZE, PROJ_SIZE, SHIP_SIZE} from "../settings";
 import Invader from "./Invader";
 
 ReactDOM.render(<App/>, document.getElementById('root'));
@@ -23,22 +23,79 @@ function App() {
     }, []);
 
     const [projectiles, setProjectiles] = useState({} as Dict<JSX.Element>);
+    const projPositions = useRef({} as Dict<ICoords>);
+
     const [invadersProjectiles, setInvadersProjectiles] = useState({} as Dict<JSX.Element>);
+    const invadersProjPositions = useRef({} as Dict<ICoords>);
+
     const [invaders, setInvaders] = useState({} as Dict<JSX.Element>);
-    const [invadersPositions, setInvadersPosition] = useState({} as Dict<ICoords>);
-    const setInvaderPosition = useCallback((id: string, coords: ICoords) => {
-        setInvadersPosition(prev => {
-            const newPosition = {...prev};
-            newPosition[id] = coords;
-            return newPosition;
+    const invadersPositions = useRef({} as Dict<ICoords>);
+
+    const playerPosition = useRef({} as ICoords);
+
+    const coordsToRect = useCallback((dic: Dict<ICoords>, size: ISize) => {
+        return Object.keys(dic).reduce((prev, curr) => {
+            prev[curr] = {...dic[curr], ...size};
+            return prev;
+        }, {} as Dict<IRect>);
+    }, []);
+
+    const checkCollision = useCallback((target: IRect, objects: Dict<IRect>) => {
+        return Object.keys(objects).find(id => {
+            const obj = objects[id];
+            return (target.x < obj.x + obj.w &&
+                target.x + target.w > obj.x &&
+                target.y < obj.y + obj.h &&
+                target.y + target.h > obj.y);
         });
-    }, [setInvadersPosition]);
-    const [playerPosition, setPlayerPosition] = useState({x: 0, y: 0} as ICoords);
+    }, []);
+
+    const checkCollisions = useRef(() => {
+
+        function deleteProjectile(id: string,
+                                  posDic: React.MutableRefObject<Dict<ICoords>>,
+                                  elementsSetState: Dispatch<SetStateAction<Dict<JSX.Element>>>) {
+            delete gameLoopFunctions.current[id];
+            delete posDic.current[id];
+            elementsSetState(prev => {
+                const next = {...prev};
+                delete next[id];
+                return next;
+            });
+        }
+
+        //Player - Projectiles
+        const hitPlayer = checkCollision(
+            {...playerPosition.current, ...SHIP_SIZE},
+            coordsToRect(invadersProjPositions.current, PROJ_SIZE)
+        );
+        if (hitPlayer) {
+            deleteProjectile(hitPlayer, invadersProjPositions, setInvadersProjectiles);
+        }
+
+        //Invaders - Projectiles
+        const projectilesRect = coordsToRect(projPositions.current, PROJ_SIZE);
+        Object.keys(invadersPositions.current).forEach(id => {
+            const rect = {...invadersPositions.current[id], ...INVADER_SIZE};
+            const hitInvader = checkCollision(rect, projectilesRect);
+            if (hitInvader) {
+                delete gameLoopFunctions.current[id];
+                delete invadersPositions.current[id];
+                setInvaders(prev => {
+                    const newInv = {...prev};
+                    delete newInv[id];
+                    return newInv;
+                });
+
+                deleteProjectile(hitInvader, projPositions, setProjectiles);
+                delete projectilesRect[hitInvader];
+            }
+        });
+    });
 
     const onShoot = useCallback((coords: ICoords, isInvader?: boolean) => {
         const id = `proj-${Math.random().toString().slice(2)}-${isInvader ? 'i' : 'p'}`;
         const setFunction = isInvader ? setInvadersProjectiles : setProjectiles;
-        console.log('Setting projectile', id);
         setFunction(prev => ({
             ...prev,
             [id]: <Projectile
@@ -49,13 +106,15 @@ function App() {
                 setGameLoopFunction={setGameLoopFunction}
                 onOutOfBounds={id => {
                     delete gameLoopFunctions.current[id];
+                    isInvader ? delete invadersProjPositions.current[id] : delete projPositions.current[id];
                     setFunction(prev => {
                         const newProj = {...prev};
                         delete newProj[id];
                         return newProj;
                     });
                 }}
-                onMove={() => {
+                onMove={coords => {
+                    isInvader ? invadersProjPositions.current[id] = coords : projPositions.current[id] = coords;
                 }}/>
         }));
     }, [setInvadersProjectiles, setProjectiles]);
@@ -70,7 +129,7 @@ function App() {
                     <Invader
                         key={id} id={id} column={c} row={r}
                         onShoot={coords => onShoot(coords, true)}
-                        onMove={coords => setInvaderPosition(id, coords)}
+                        onMove={coords => invadersPositions.current[id] = coords}
                         setGameLoopFunction={setGameLoopFunction}/>
             }
         }
@@ -83,6 +142,8 @@ function App() {
             if (!isPaused.current) {
                 const dt = Date.now() - prevFrameTime.current;
                 Object.values(gameLoopFunctions.current).forEach(f => f(dt));
+                //Check collisions
+                checkCollisions.current();
             }
             prevFrameTime.current = Date.now();
         }, 1000 / 30);
@@ -103,13 +164,13 @@ function App() {
                 {Object.values(invaders)}
                 {Object.values(invadersProjectiles)}
                 {Object.values(projectiles)}
-            </section>
-            <section className={"player-area"}>
-                <Player
-                    setGameLoopFunction={setGameLoopFunction}
-                    onMove={coords => setPlayerPosition(coords)}
-                    onShoot={coords => onShoot(coords, false)}
-                />
+                <section className={"player-area"}>
+                    <Player
+                        setGameLoopFunction={setGameLoopFunction}
+                        onMove={coords => playerPosition.current = coords}
+                        onShoot={coords => onShoot(coords, false)}
+                    />
+                </section>
             </section>
         </main>
     );
