@@ -62,6 +62,52 @@
       "style": {
         "--color-style3": "#687E94"
       }
+    },
+    {
+      "name": "Ondulations",
+      "author": "Ricardo Gomez Angel",
+      "link": "https://unsplash.com/@rgaleria",
+      "path": "ricardo-gomez-angel-dTSaC-S-7fs-unsplash.jpg",
+      "style": {
+        "--color-style3": "#446271"
+      }
+    },
+    {
+      "name": "Entering heaven",
+      "author": "Sebin Thomas",
+      "link": "https://unsplash.com/@sebinthomas",
+      "path": "sebin-thomas-OdBFUurPHjo-unsplash.jpg",
+      "style": {
+        "--color-style3": "#A7AE89"
+      }
+    },
+    {
+      "name": "Purple night sky",
+      "author": "Vincentiu Solomon",
+      "link": "https://unsplash.com/@vincentiu",
+      "path": "vincentiu-solomon-ln5drpv_ImI-unsplash.jpg",
+      "style": {
+        "--color-style3": "#8249A9"
+      }
+    },
+    {
+      "name": "Long exposure",
+      "author": "Shahzin Shajid",
+      "link": "https://unsplash.com/@shahzin_2903",
+      "path": "shahzin-shajid-PSxZ3HA7kII-unsplash.jpg",
+      "style": {
+        "--color-style3": "#A75B5E"
+      }
+    }
+  ,
+    {
+      "name": "Merzouga, Morocco",
+      "author": "Fernando Paredes Murillo",
+      "link": "https://unsplash.com/@ferparmur",
+      "path": "fernando-paredes-murillo-Xc6gtOwSMSA-unsplash.jpg",
+      "style": {
+        "--color-style3": "#AB5727"
+      }
     }
   ]
 }

@@ -5,6 +5,11 @@ import '../assets/images/geran-de-klerk-qzgN45hseN0-unsplash.jpg'
 import '../assets/images/andrew-neel-a_K7R1kugUE-unsplash.jpg'
 import '../assets/images/ganapathy-kumar-Gl9r22w_Oxk-unsplash.jpg'
 import '../assets/images/damiano-baschiera-d4feocYfzAM-unsplash.jpg'
+import '../assets/images/ricardo-gomez-angel-dTSaC-S-7fs-unsplash.jpg'
+import '../assets/images/sebin-thomas-OdBFUurPHjo-unsplash.jpg'
+import '../assets/images/vincentiu-solomon-ln5drpv_ImI-unsplash.jpg'
+import '../assets/images/shahzin-shajid-PSxZ3HA7kII-unsplash.jpg'
+import '../assets/images/fernando-paredes-murillo-Xc6gtOwSMSA-unsplash.jpg'
 
 const backgrounds = require('../assets/backgrounds.json').backgrounds as Background[];
 import * as AssetLoader from '../../node_modules/async-assets-loader/dist/async-assets-loader.js'
