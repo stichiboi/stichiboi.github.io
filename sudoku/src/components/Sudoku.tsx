@@ -1,16 +1,24 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {Board, CELL_HIGHLIGHT, DIFFICULTY, ICoords, InvalidBoardError, ISudoku, SUDOKU_VALIDITY} from "../types/types";
-import {Cancel, Check, EditPencil, QuestionMark, Undo} from "iconoir-react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+    Board,
+    CELL_HIGHLIGHT,
+    DIFFICULTY,
+    ICoords,
+    InvalidBoardError,
+    ISudoku,
+    SUDOKU_VALIDITY
+} from "../types/types";
+import { Cancel, Check, EditPencil, QuestionMark, Undo } from "iconoir-react";
 import ActionButton from "./ActionButton";
 import SudokuGrid from "./SudokuGrid";
 import Cell from "./Cell";
-import {checkValidity, getFreeCells, loop, visitDeps} from "../sudokuGenerator";
+import { checkValidity, getFreeCells, loop, visitDeps } from "../sudokuGenerator";
 import confetti from 'canvas-confetti';
 
 const HINT_PENALTY = 30000; //30 sec
 const CHECK_PENALTY = 30000; //30 sec
 
-export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (playAgain?: boolean) => unknown }) {
+export default function Sudoku({ sudoku, onExit }: { sudoku: ISudoku, onExit: (playAgain?: boolean) => unknown }) {
     const [, setStartTime] = useState(0);
     const formatTimer = useCallback((timer: number) => {
         const date = new Date(timer);
@@ -135,10 +143,10 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         return (
             <SudokuGrid
                 size={root}
-                contents={Array.from({length: sudoku.solution.length})
+                contents={Array.from({ length: sudoku.solution.length })
                     .map((_v, i) => <SudokuGrid
                         size={root}
-                        contents={Array.from({length: sudoku.solution.length})
+                        contents={Array.from({ length: sudoku.solution.length })
                             .map((_v, j) => {
                                 const y = Math.floor(i / root) * root + Math.floor(j / root);
                                 const x = j % root + i % root * root;
@@ -147,7 +155,11 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
                                         cell={sudoku.puzzle[y][x]}
                                         highlight={getHighlight(x, y)}
                                         onClick={() => {
-                                            selected.current = {x, y}
+                                            if (selected.current?.x === x && selected.current?.y === y) {
+                                                selected.current = undefined
+                                            } else {
+                                                selected.current = { x, y }
+                                            }
                                             triggerRender();
                                         }}
                                     />);
@@ -163,7 +175,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         return (
             <SudokuGrid size={root}
                         isSmall={true}
-                        contents={Array.from({length: sudoku.solution.length})
+                        contents={Array.from({ length: sudoku.solution.length })
                             .map((x, i) => {
                                 const missCount = sudoku.puzzle.length - numberCount[i + 1];
                                 return (
@@ -217,7 +229,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
 
     useEffect(() => {
         try {
-            const asBoard = Array.from({length: sudoku.puzzle.length}).map(() => []) as Board;
+            const asBoard = Array.from({ length: sudoku.puzzle.length }).map(() => []) as Board;
             loop(((x, y) => {
                 const value = sudoku.puzzle[y][x].value;
                 if (!value) throw InvalidBoardError;
@@ -247,16 +259,16 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
 
         function movementEventListener(event: KeyboardEvent) {
             function getNewLocation(location: ICoords): ICoords | undefined {
-                const {x, y} = location;
+                const { x, y } = location;
                 switch (event.key) {
                     case "ArrowUp":
-                        return {x, y: y - 1 < 0 ? sudoku.puzzle.length - 1 : y - 1};
+                        return { x, y: y - 1 < 0 ? sudoku.puzzle.length - 1 : y - 1 };
                     case "ArrowDown":
-                        return {x, y: (y + 1) % sudoku.puzzle.length};
+                        return { x, y: (y + 1) % sudoku.puzzle.length };
                     case "ArrowLeft":
-                        return {y, x: x - 1 < 0 ? sudoku.puzzle.length - 1 : x - 1};
+                        return { y, x: x - 1 < 0 ? sudoku.puzzle.length - 1 : x - 1 };
                     case "ArrowRight":
-                        return {y, x: (x + 1) % sudoku.puzzle.length};
+                        return { y, x: (x + 1) % sudoku.puzzle.length };
                 }
             }
 
@@ -290,7 +302,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
         function fire(particleRatio: number, opts?: confetti.Options) {
             const count = 200;
             const defaults = {
-                origin: {y: 1}
+                origin: { y: 1 }
             };
             return confetti(Object.assign({}, defaults, opts, {
                 particleCount: Math.floor(count * particleRatio)
@@ -335,7 +347,7 @@ export default function Sudoku({sudoku, onExit}: { sudoku: ISudoku, onExit: (pla
     function recordNumberCount(number: number, op = 1) {
         //Wrapper to keep track of the number of digits in the sudoku
         setNumberCount(prev => {
-            const newCount = {...prev};
+            const newCount = { ...prev };
             newCount[number] += op;
             return newCount;
         });
