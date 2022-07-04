@@ -148,4 +148,5 @@
 
 .sudoku-complete > * {
     --spacing: 32px;
+    color: var(--color-dark);
 }
